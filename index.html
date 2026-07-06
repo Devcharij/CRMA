@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -6,576 +7,696 @@
   <title>Geopolitical Metabolism | Interactive Research</title>
   <meta name="description" content="Academic research platform visualizing the Geopolitical Metabolism and Ecologically Unequal Exchange in global Critical Raw Material supply chains.">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
+  <!-- Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
   
   <style>
-    /* Academic & Journalistic Design System */
+    /* ==========================================================================
+       Premium Design System & Variables
+       ========================================================================== */
     :root {
-      /* Light Theme (Paper/Print feel) */
-      --bg-page: #fdfcfb;
-      --bg-panel: #ffffff;
-      --bg-hover: #f1f0ee;
-      --text-main: #111111;
-      --text-muted: #555555;
-      --border-light: #e5e4e2;
-      --border-strong: #111111;
-      --accent: #2c5282;
-      --accent-hover: #1a365d;
+      /* Light Theme (Clean, spacious, high-contrast) */
+      --bg-body: #f4f5f7;
+      --bg-card: #ffffff;
+      --bg-input: #f9fafb;
+      --bg-hover: #f3f4f6;
+      --bg-glass: rgba(255, 255, 255, 0.85);
       
-      --font-serif: 'Lora', Georgia, serif;
-      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-mono: 'SFMono-Regular', Consolas, monospace;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --text-tertiary: #9ca3af;
       
-      --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --border-color: #e5e7eb;
+      --border-focus: #cbd5e1;
+      
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-muted: #dbeafe;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
     }
 
     [data-theme="dark"] {
-      /* Dark Theme (Slate/Screen feel) */
-      --bg-page: #0f1115;
-      --bg-panel: #16181d;
-      --bg-hover: #22252b;
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
-      --border-light: #2d3748;
-      --border-strong: #e2e8f0;
-      --accent: #63b3ed;
-      --accent-hover: #90cdf4;
+      /* Dark Theme (Deep slate, low eye strain, elegant) */
+      --bg-body: #0b0f19;
+      --bg-card: #111827;
+      --bg-input: #1f2937;
+      --bg-hover: #374151;
+      --bg-glass: rgba(17, 24, 39, 0.85);
       
-      --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --text-tertiary: #6b7280;
+      
+      --border-color: #374151;
+      --border-focus: #4b5563;
+      
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-muted: #1e3a8a;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
     }
 
+    /* ==========================================================================
+       Global Resets & Base
+       ========================================================================== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      background-color: var(--bg-page);
-      color: var(--text-main);
+      background-color: var(--bg-body);
+      color: var(--text-primary);
       font-family: var(--font-sans);
       line-height: 1.6;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-      transition: background-color 0.3s, color 0.3s;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Layout: Split Screen Architecture */
-    .sidebar {
-      width: 380px;
-      height: 100vh;
-      background-color: var(--bg-panel);
-      border-right: 1px solid var(--border-light);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      z-index: 10;
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 2rem;
     }
 
-    .main-content {
-      flex: 1;
-      height: 100vh;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-      padding: 0;
-      position: relative;
+    /* ==========================================================================
+       Top Navigation & Header
+       ========================================================================== */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0;
     }
 
-    /* Sidebar Content */
-    .sidebar-header {
-      padding: 2.5rem 2rem 1.5rem;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .project-title {
-      font-family: var(--font-serif);
-      font-size: 1.7rem;
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      color: var(--text-main);
-    }
-
-    .project-abstract {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .sidebar-controls {
-      padding: 1.5rem 2rem;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .control-section-title {
-      font-family: var(--font-sans);
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border-light);
-      padding-bottom: 0.5rem;
-    }
-
-    /* Minimalist Phase Selector */
-    .phase-selector {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .phase-btn {
-      background: transparent;
-      border: none;
-      text-align: left;
-      padding: 0.6rem 0.75rem;
-      border-radius: 6px;
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .phase-btn:hover {
-      background-color: var(--bg-hover);
-      color: var(--text-main);
-    }
-
-    .phase-btn.active {
-      background-color: var(--bg-hover);
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .phase-btn.active::before {
-      content: '';
-      display: block;
-      width: 4px;
-      height: 16px;
-      background-color: var(--accent);
-      border-radius: 2px;
-    }
-
-    /* Select Dropdowns */
-    .filter-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .filter-group label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    select, input[type="text"] {
-      width: 100%;
-      background-color: transparent;
-      border: 1px solid var(--border-light);
-      color: var(--text-main);
-      padding: 0.6rem;
-      border-radius: 4px;
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    select:focus, input[type="text"]:focus {
-      border-color: var(--accent);
-    }
-
-    .sidebar-footer {
-      padding: 1.5rem 2rem;
-      border-top: 1px solid var(--border-light);
+    .nav-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border-light);
-      color: var(--text-main);
-      padding: 0.5rem 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
+    .brand {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+    }
+
+    .theme-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-family: var(--font-sans);
       font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      transition: all 0.2s ease;
     }
-    .theme-toggle:hover { background: var(--bg-hover); }
+    
+    .theme-btn:hover { background: var(--bg-hover); transform: translateY(-1px); }
 
-    /* Main Content Area */
-    .content-wrapper {
-      max-width: 1200px;
+    .hero-section {
+      padding: 4rem 0 3rem;
+      text-align: center;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 3rem 4rem;
     }
 
-    /* KPI Ribbon (Journalistic Style) */
-    .kpi-ribbon {
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* ==========================================================================
+       Interactive Filter Dashboard
+       ========================================================================== */
+    .control-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 3rem;
+      transform: translateY(-20px);
+    }
+
+    /* Segmented Control for Phases */
+    .segmented-control {
+      display: flex;
+      background: var(--bg-input);
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .segment-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .segment-btn:hover { color: var(--text-primary); }
+    
+    .segment-btn.active {
+      background: var(--bg-card);
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Select Grids */
+    .filter-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3.5rem;
-      padding-bottom: 2rem;
-      border-bottom: 2px solid var(--border-strong);
+      gap: 1.5rem;
     }
 
-    .kpi-item {
+    .filter-item {
       display: flex;
       flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-item label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      color: var(--text-tertiary);
+    }
+
+    select {
+      appearance: none;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem top 50%;
+      background-size: 0.65rem auto;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-muted);
+    }
+
+    /* ==========================================================================
+       KPI Cards Grid
+       ========================================================================== */
+    .kpi-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .kpi-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
     }
 
     .kpi-value {
       font-family: var(--font-serif);
-      font-size: 2.2rem;
-      color: var(--text-main);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
       line-height: 1.1;
-      margin-bottom: 0.25rem;
     }
 
-    .kpi-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      font-weight: 600;
+    .kpi-desc {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      margin-top: 0.5rem;
     }
 
-    /* Visualization Containers */
-    .viz-block {
-      margin-bottom: 4rem;
+    /* ==========================================================================
+       Visualizations
+       ========================================================================== */
+    .chart-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 3rem;
     }
 
-    .viz-header {
-      margin-bottom: 1.5rem;
+    .chart-header {
+      margin-bottom: 2rem;
+      text-align: center;
     }
 
-    .viz-title {
+    .chart-title {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
-      color: var(--text-main);
-      margin-bottom: 0.25rem;
+      font-size: 1.75rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
     }
 
-    .viz-caption {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      max-width: 800px;
+    .chart-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin: 0 auto;
     }
 
-    .chart-container {
+    .sankey-wrapper {
       width: 100%;
-      min-height: 550px;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: var(--shadow-subtle);
+      min-height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Data Table (Booktabs Style) */
-    .table-header-row {
+    .bar-wrapper {
+      width: 100%;
+      min-height: 400px;
+    }
+
+    /* ==========================================================================
+       Data Table
+       ========================================================================== */
+    .table-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 4rem;
+      overflow: hidden; /* Encapsulates the table completely */
+    }
+
+    .table-toolbar {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
-    .export-btn {
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s;
+    .search-input {
+      padding: 0.6rem 1rem;
+      width: 300px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
     }
-    .export-btn:hover {
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-muted);
+    }
+
+    .btn-export {
       background: var(--accent);
-      color: var(--bg-panel);
+      color: #ffffff;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
     }
+
+    .btn-export:hover { background: var(--accent-hover); }
 
     .table-responsive {
+      width: 100%;
       overflow-x: auto;
-      margin-bottom: 1rem;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.85rem;
-      font-family: var(--font-sans);
-    }
-
-    th, td {
-      padding: 0.75rem 1rem;
-      white-space: nowrap;
-    }
-
-    /* LaTeX / Academic Table borders */
-    thead {
-      border-top: 2px solid var(--border-strong);
-      border-bottom: 1px solid var(--border-strong);
     }
 
     th {
+      background: var(--bg-input);
+      padding: 1rem 1.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
       font-weight: 600;
-      color: var(--text-main);
       cursor: pointer;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
       user-select: none;
     }
-    
+
     th:hover { color: var(--accent); }
 
-    tbody tr {
-      border-bottom: 1px solid var(--border-light);
+    td {
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
     }
 
-    tbody tr:last-child {
-      border-bottom: 2px solid var(--border-strong);
-    }
+    tbody tr:hover { background: var(--bg-hover); }
+    
+    tbody tr:last-child td { border-bottom: none; }
 
-    tbody tr:hover { background-color: var(--bg-hover); }
+    .numeric { font-variant-numeric: tabular-nums; text-align: right; }
 
-    .num-cell {
-      text-align: right;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      background-color: var(--bg-hover);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      font-size: 0.7rem;
+    .badge-phase {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
     }
 
-    /* Pagination */
-    .pagination {
+    .table-footer {
+      padding: 1rem 2rem;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
     }
 
-    .page-controls button {
-      background: transparent;
-      border: 1px solid var(--border-light);
-      color: var(--text-main);
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
+    .pagination-info { font-size: 0.85rem; color: var(--text-secondary); }
+
+    .pagination-btns button {
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
       cursor: pointer;
+      font-size: 0.85rem;
       margin-left: 0.5rem;
-    }
-    .page-controls button:disabled { opacity: 0.4; cursor: not-allowed; }
-    .page-controls button:not(:disabled):hover { border-color: var(--text-main); }
-
-    /* Loading Overlay */
-    #loading {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--bg-page);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999; text-align: center;
+      font-weight: 500;
     }
     
-    .spinner {
-      width: 40px; height: 40px;
-      border: 2px solid var(--border-light); border-top-color: var(--accent);
-      border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;
+    .pagination-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .pagination-btns button:not(:disabled):hover { background: var(--bg-hover); }
+
+    /* ==========================================================================
+       Loading & Error States
+       ========================================================================== */
+    #loading {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-body);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 9999;
     }
+
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+    
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .error-box {
-      max-width: 500px; padding: 2rem; border: 1px solid #e53e3e; background: var(--bg-panel);
-      border-radius: 8px; text-align: left; display: none;
+    .error-card {
+      background: var(--bg-card);
+      border: 1px solid #ef4444;
+      padding: 2rem;
+      border-radius: var(--radius-lg);
+      max-width: 500px;
+      text-align: center;
+      display: none;
+      box-shadow: var(--shadow-lg);
     }
 
-    /* Responsive Design */
-    @media (max-width: 1024px) {
-      body { flex-direction: column; overflow: auto; }
-      .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-light); position: relative; }
-      .main-content { height: auto; overflow: visible; }
-      .content-wrapper { padding: 2rem; }
-      .kpi-ribbon { gap: 1rem; }
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-tertiary);
+      font-size: 0.85rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2.25rem; }
+      .segmented-control { flex-direction: column; }
+      .chart-section { padding: 1rem; }
+      .table-toolbar { flex-direction: column; align-items: stretch; }
+      .search-input { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Loading & Error States -->
+  <!-- Loading State -->
   <div id="loading">
-    <div id="spinner-container">
-      <div class="spinner"></div>
-      <h2 style="font-family: var(--font-serif); font-weight: 400; margin-bottom: 0.5rem;">Initializing Research Engine</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Loading Geopolitical Metabolism Dataset...</p>
+    <div id="spinner-container" style="text-align: center;">
+      <div class="spinner" style="margin: 0 auto 1.5rem;"></div>
+      <h2 style="font-family: var(--font-serif); color: var(--text-primary); font-size: 1.5rem; margin-bottom: 0.5rem;">Processing Database</h2>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">UN Comtrade Extract (2018–2023)</p>
     </div>
-    <div id="error-message" class="error-box">
-      <h3 style="color: #e53e3e; font-family: var(--font-serif); margin-bottom: 1rem;">Data Connection Failed</h3>
-      <p style="font-size: 0.9rem; margin-bottom: 1rem;">Unable to locate <code>database_complete.json</code>. Ensure the file is in the same directory and you are using a local server (e.g., VS Code Live Server) or GitHub Pages, not a direct file:// link.</p>
-      <button onclick="location.reload()" style="padding: 0.5rem 1rem; background: var(--text-main); color: var(--bg-page); border: none; border-radius: 4px; cursor: pointer;">Retry Connection</button>
+    <div id="error-message" class="error-card">
+      <h3 style="color: #ef4444; font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1rem;">Connection Error</h3>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">The dataset <code>database_complete.json</code> could not be loaded. Please ensure you are viewing this via a web server or GitHub Pages.</p>
+      <button onclick="location.reload()" style="background: var(--text-primary); color: var(--bg-body); border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry Connection</button>
     </div>
   </div>
 
-  <!-- Left Sidebar (Controls & Narrative) -->
-  <aside class="sidebar">
-    <header class="sidebar-header">
-      <h1 class="project-title">Geopolitical Metabolism</h1>
-      <p class="project-abstract">Ecologically unequal exchange in critical raw material flows driving the European Green Deal (2018–2023).</p>
-    </header>
-
-    <div class="sidebar-controls">
-      <div class="control-section-title">Analytical Phases</div>
-      <div class="phase-selector" id="phase-tabs">
-        <button class="phase-btn active" data-phase="ALL">Global Synthesis (All Phases)</button>
-        <button class="phase-btn" data-phase="p1">Phase 1: Macro Raw Extraction</button>
-        <button class="phase-btn" data-phase="p2">Phase 2: Chemical Refinement</button>
-        <button class="phase-btn" data-phase="p3a">Phase 3A: Tech Monopoly (Batteries)</button>
-        <button class="phase-btn" data-phase="p3b">Phase 3B: Tech Monopoly (EVs)</button>
-      </div>
-
-      <div class="control-section-title">Data Filters</div>
-      <div class="filter-group">
-        <label for="filter-year">Temporal Range</label>
-        <select id="filter-year"><option value="ALL">All Years (2018–2023)</option></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-reporter">Reporting Economy</label>
-        <select id="filter-reporter"><option value="ALL">All Reporters</option></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-partner">Trade Partner</label>
-        <select id="filter-partner"><option value="ALL">All Partners</option></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-commodity">HS Commodity Category</label>
-        <select id="filter-commodity"><option value="ALL">All Commodities</option></select>
-      </div>
-    </div>
-
-    <footer class="sidebar-footer">
-      <span style="font-size: 0.75rem; color: var(--text-muted);">UN Comtrade DB</span>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+  <!-- Sticky Navigation -->
+  <nav class="top-nav">
+    <div class="container nav-inner">
+      <div class="brand">Geopolitical Metabolism</div>
+      <button class="theme-btn" id="theme-toggle">
         <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
       </button>
-    </footer>
-  </aside>
-
-  <!-- Right Main Content Area -->
-  <main class="main-content">
-    <div class="content-wrapper">
-      
-      <!-- Top Academic KPI Ribbon -->
-      <section class="kpi-ribbon" aria-label="Key Performance Indicators">
-        <div class="kpi-item">
-          <span class="kpi-value" id="kpi-val-usd">$0.00 M</span>
-          <span class="kpi-label">Financial Volume (USD)</span>
-        </div>
-        <div class="kpi-item">
-          <span class="kpi-value" id="kpi-val-kg">0.00 MT</span>
-          <span class="kpi-label">Physical Volume (Metric Tons)</span>
-        </div>
-        <div class="kpi-item">
-          <span class="kpi-value" id="kpi-val-origin" style="font-size: 1.6rem; margin-top: 0.4rem;">—</span>
-          <span class="kpi-label">Dominant Origin</span>
-        </div>
-        <div class="kpi-item">
-          <span class="kpi-value" id="kpi-val-dest" style="font-size: 1.6rem; margin-top: 0.4rem;">—</span>
-          <span class="kpi-label">Primary Destination</span>
-        </div>
-      </section>
-
-      <!-- Sankey Diagram -->
-      <section class="viz-block">
-        <div class="viz-header">
-          <h2 class="viz-title">Structural Trade Hierarchy</h2>
-          <p class="viz-caption">Bilateral flows representing the transfer of physical wealth and economic value. Nodes are geopolitical actors; link width indicates nominal trade valuation.</p>
-        </div>
-        <div id="sankey_chart" class="chart-container"></div>
-      </section>
-
-      <!-- Bar Chart -->
-      <section class="viz-block">
-        <div class="viz-header">
-          <h2 class="viz-title">Commodity Valuation Composition</h2>
-          <p class="viz-caption">Distribution of total value across Harmonized System (HS) classifications within the selected scope.</p>
-        </div>
-        <div id="bar_chart" class="chart-container" style="min-height: 380px;"></div>
-      </section>
-
-      <!-- Data Table -->
-      <section class="viz-block" style="margin-bottom: 2rem;">
-        <div class="table-header-row">
-          <div>
-            <h2 class="viz-title">Empirical Registry</h2>
-            <p class="viz-caption">Raw data matrix extracted and harmonized from the UN Comtrade database.</p>
-          </div>
-          <div>
-            <button class="export-btn" id="btn-export">Download CSV</button>
-          </div>
-        </div>
-        
-        <div style="margin-bottom: 1rem;">
-           <input type="text" id="search-input" placeholder="Search specific flows, codes, or economies..." style="max-width: 400px; padding: 0.4rem 0.6rem;">
-        </div>
-
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th onclick="sortTable('phase_id')">Phase</th>
-                <th onclick="sortTable('year')">Year</th>
-                <th onclick="sortTable('origin')">Origin</th>
-                <th onclick="sortTable('destination')">Destination</th>
-                <th onclick="sortTable('hs_code')">HS Code</th>
-                <th onclick="sortTable('hs_desc')">Commodity Description</th>
-                <th class="num-cell" onclick="sortTable('value_usd')">Value (USD)</th>
-                <th class="num-cell" onclick="sortTable('weight_kg')">Weight (KG)</th>
-              </tr>
-            </thead>
-            <tbody id="table-body">
-              <!-- JS Populated -->
-            </tbody>
-          </table>
-        </div>
-
-        <div class="pagination">
-          <div id="page-info">Showing records</div>
-          <div class="page-controls">
-            <button id="btn-prev" onclick="changePage(-1)">Previous</button>
-            <button id="btn-next" onclick="changePage(1)">Next</button>
-          </div>
-        </div>
-      </section>
-
     </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section container">
+    <h1 class="hero-title">Ecologically Unequal Exchange in Critical Raw Materials</h1>
+    <p class="hero-subtitle">An interactive mapping of the structural trade hierarchy driving the European Green Deal. Explore the extraction, refinement, and technological monopolization of the global energy transition.</p>
+  </header>
+
+  <main class="container">
+    
+    <!-- Floating Filter Dashboard -->
+    <section class="control-panel">
+      <!-- iOS Style Segmented Control -->
+      <div class="segmented-control" id="phase-tabs">
+        <button class="segment-btn active" data-phase="ALL">Global Synthesis</button>
+        <button class="segment-btn" data-phase="p1">Phase 1: Raw Extraction</button>
+        <button class="segment-btn" data-phase="p2">Phase 2: Chemical Funnel</button>
+        <button class="segment-btn" data-phase="p3a">Phase 3A: Tech Batteries</button>
+        <button class="segment-btn" data-phase="p3b">Phase 3B: Tech EVs</button>
+      </div>
+
+      <div class="filter-grid">
+        <div class="filter-item">
+          <label>Temporal Range</label>
+          <select id="filter-year"><option value="ALL">All Years</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Reporting Economy</label>
+          <select id="filter-reporter"><option value="ALL">All Reporters</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Trade Partner</label>
+          <select id="filter-partner"><option value="ALL">All Partners</option></select>
+        </div>
+        <div class="filter-item">
+          <label>Commodity Classification</label>
+          <select id="filter-commodity"><option value="ALL">All Commodities</option></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI Grid -->
+    <section class="kpi-container">
+      <div class="kpi-card">
+        <div class="kpi-title">Financial Valuation</div>
+        <div>
+          <div class="kpi-value" id="kpi-val-usd">$0.00</div>
+          <div class="kpi-desc">Total Trade Value (USD)</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Physical Volume</div>
+        <div>
+          <div class="kpi-value" id="kpi-val-kg">0.00</div>
+          <div class="kpi-desc">Net Weight (Metric Tons)</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Dominant Origin Node</div>
+        <div>
+          <div class="kpi-value" id="kpi-val-origin">—</div>
+          <div class="kpi-desc">Largest Extractive Source</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Primary Destination Hub</div>
+        <div>
+          <div class="kpi-value" id="kpi-val-dest">—</div>
+          <div class="kpi-desc">Largest Import Sink</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sankey Chart Section -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2 class="chart-title">Structural Bilateral Flows</h2>
+        <p class="chart-subtitle">Nodes represent geopolitical actors. Link width indicates nominal trade valuation (USD), illustrating the metabolic transfer of wealth and resources.</p>
+      </div>
+      <div id="sankey_chart" class="sankey-wrapper"></div>
+    </section>
+
+    <!-- Bar Chart Section -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2 class="chart-title">Commodity Composition</h2>
+        <p class="chart-subtitle">Distribution of total value across Harmonized System (HS) technological classifications.</p>
+      </div>
+      <div id="bar_chart" class="bar-wrapper"></div>
+    </section>
+
+    <!-- Beautiful Data Table -->
+    <section class="table-section">
+      <div class="table-toolbar">
+        <div>
+          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.25rem;">Empirical Registry</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">Extracted and harmonized dataset from UN Comtrade.</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <input type="text" class="search-input" id="search-input" placeholder="Search flows, codes, or actors...">
+          <button class="btn-export" id="btn-export">Export CSV</button>
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable('phase_id')">Phase ⇕</th>
+              <th onclick="sortTable('year')">Year ⇕</th>
+              <th onclick="sortTable('origin')">Origin Node ⇕</th>
+              <th onclick="sortTable('destination')">Destination Node ⇕</th>
+              <th onclick="sortTable('hs_code')">HS Code ⇕</th>
+              <th onclick="sortTable('hs_desc')">Commodity ⇕</th>
+              <th class="numeric" onclick="sortTable('value_usd')">Valuation (USD) ⇕</th>
+              <th class="numeric" onclick="sortTable('weight_kg')">Weight (KG) ⇕</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        <div class="pagination-info" id="page-info">Showing 0 of 0 records</div>
+        <div class="pagination-btns">
+          <button id="btn-prev" onclick="changePage(-1)">Previous</button>
+          <button id="btn-next" onclick="changePage(1)">Next</button>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <div class="container">
+      <p>Research Methodology & Data Synthesis: Geopolitical Metabolism and Ecologically Unequal Exchange.</p>
+      <p style="margin-top: 0.5rem; opacity: 0.7;">Data Source: United Nations International Trade Statistics Database (UN Comtrade)</p>
+    </div>
+  </footer>
+
   <script>
-    // System State
+    // State Management
     const STATE = {
       raw: [], filtered: [],
       filters: { phase: 'ALL', year: 'ALL', reporter: 'ALL', partner: 'ALL', commodity: 'ALL', search: '' },
       sort: { field: 'value_usd', order: 'desc' },
-      pagination: { page: 1, pageSize: 20 },
+      pagination: { page: 1, pageSize: 15 },
       chartsLoaded: false
     };
 
@@ -616,7 +737,7 @@
         list.forEach(item => {
           const opt = document.createElement('option');
           opt.value = item;
-          opt.textContent = String(item).length > 50 ? String(item).substring(0, 50) + '...' : item;
+          opt.textContent = String(item).length > 55 ? String(item).substring(0, 55) + '...' : item;
           select.appendChild(opt);
         });
       };
@@ -628,17 +749,15 @@
     }
 
     function setupEventListeners() {
-      // Phase Buttons (Sidebar)
-      document.querySelectorAll('.phase-btn').forEach(btn => {
+      document.querySelectorAll('.segment-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
           e.currentTarget.classList.add('active');
           STATE.filters.phase = e.currentTarget.getAttribute('data-phase');
           applyFilters();
         });
       });
 
-      // Dropdowns
       ['year', 'reporter', 'partner', 'commodity'].forEach(field => {
         document.getElementById(`filter-${field}`).addEventListener('change', (e) => {
           STATE.filters[field] = e.target.value;
@@ -646,7 +765,6 @@
         });
       });
 
-      // Search & Export
       document.getElementById('search-input').addEventListener('input', (e) => {
         STATE.filters.search = e.target.value.toLowerCase();
         STATE.pagination.page = 1;
@@ -654,13 +772,12 @@
       });
       document.getElementById('btn-export').addEventListener('click', exportToCSV);
 
-      // Debounced Resize for Charts
       let resizeTimeout;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           if (STATE.chartsLoaded && STATE.filtered.length > 0) renderCharts();
-        }, 200);
+        }, 250);
       });
     }
 
@@ -674,8 +791,7 @@
         
         if (STATE.filters.search) {
           const s = STATE.filters.search;
-          const match = [row.origin, row.destination, row.hs_desc, row.hs_code, row.year]
-                        .join(' ').toLowerCase();
+          const match = [row.origin, row.destination, row.hs_desc, row.hs_code, row.year].join(' ').toLowerCase();
           if (!match.includes(s)) return false;
         }
         return true;
@@ -684,9 +800,7 @@
       STATE.filtered.sort((a, b) => {
         let valA = a[STATE.sort.field];
         let valB = b[STATE.sort.field];
-        if (typeof valA === 'string') {
-          return STATE.sort.order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-        }
+        if (typeof valA === 'string') return STATE.sort.order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
         return STATE.sort.order === 'asc' ? (valA || 0) - (valB || 0) : (valB || 0) - (valA || 0);
       });
 
@@ -724,7 +838,7 @@
       });
 
       const fmtUSD = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
-      const fmtMT = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})}`;
+      const fmtMT = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M MT` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})} MT`;
 
       const topOrigin = Object.entries(originMap).sort((a, b) => b[1] - a[1])[0];
       const topDest = Object.entries(destMap).sort((a, b) => b[1] - a[1])[0];
@@ -737,20 +851,23 @@
 
     function renderCharts() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const textCol = isDark ? '#e2e8f0' : '#111111';
-      const gridCol = isDark ? '#2d3748' : '#e5e4e2';
-      const chartBg = isDark ? '#16181d' : '#ffffff';
+      const textCol = isDark ? '#f9fafb' : '#111827';
+      const gridCol = isDark ? '#374151' : '#e5e7eb';
 
       const sankeyEl = document.getElementById('sankey_chart');
       const barEl = document.getElementById('bar_chart');
 
       if (STATE.filtered.length === 0) {
-        sankeyEl.innerHTML = '<p style="color:var(--text-muted); padding:2rem;">No data available for current selection.</p>';
+        sankeyEl.innerHTML = '<p style="color:var(--text-tertiary); text-align:center; width:100%;">No data matches the current filters.</p>';
         barEl.innerHTML = '';
         return;
       }
 
-      // 1. Sankey Logic
+      // Premium Sankey Colors
+      const academicColors = isDark 
+        ? ['#60a5fa', '#34d399', '#f472b6', '#fbbf24', '#a78bfa', '#9ca3af']
+        : ['#2563eb', '#059669', '#db2777', '#d97706', '#7c3aed', '#4b5563'];
+
       const sankeyMap = {};
       STATE.filtered.forEach(r => {
         if (!r.origin || !r.destination) return;
@@ -764,23 +881,20 @@
       sData.addColumn('number', 'Value (USD)');
       Object.entries(sankeyMap).forEach(([k, v]) => sData.addRow([...k.split('____'), v]));
 
-      // Elegant Academic Colors
-      const academicColors = ['#2c5282', '#2b6cb0', '#2f855a', '#c53030', '#744210', '#4a5568'];
-
       const sChart = new google.visualization.Sankey(sankeyEl);
       sChart.draw(sData, {
         sankey: {
-          node: { label: { fontName: 'Inter', fontSize: 13, color: textCol }, colors: academicColors, nodePadding: 25, width: 12 },
+          node: { label: { fontName: 'Inter', fontSize: 13, color: textCol, bold: true }, colors: academicColors, nodePadding: 30, width: 15 },
           link: { colorMode: 'gradient', colors: academicColors }
         },
         tooltip: { textStyle: { fontName: 'Inter', fontSize: 12 } }
       });
 
-      // 2. Bar Chart Logic
+      // Bar Chart Logic
       const cMap = {};
       STATE.filtered.forEach(r => {
         if (!r.hs_desc) return;
-        const label = r.hs_desc.length > 35 ? r.hs_desc.substring(0, 35) + '...' : r.hs_desc;
+        const label = r.hs_desc.length > 40 ? r.hs_desc.substring(0, 40) + '...' : r.hs_desc;
         cMap[label] = (cMap[label] || 0) + (r.value_usd || 0);
       });
 
@@ -791,12 +905,12 @@
 
       const bChart = new google.visualization.BarChart(barEl);
       bChart.draw(bData, {
-        backgroundColor: chartBg,
+        backgroundColor: 'transparent',
         legend: { position: 'none' },
         chartArea: { width: '65%', height: '80%' },
         hAxis: { textStyle: { color: textCol, fontName:'Inter' }, gridlines: { color: gridCol } },
-        vAxis: { textStyle: { color: textCol, fontName:'Inter', fontSize: 11 } },
-        colors: [isDark ? '#63b3ed' : '#2c5282']
+        vAxis: { textStyle: { color: textCol, fontName:'Inter', fontSize: 12 } },
+        colors: [isDark ? '#3b82f6' : '#2563eb']
       });
     }
 
@@ -809,7 +923,7 @@
       const pageData = STATE.filtered.slice(start, end);
 
       if (pageData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">No analytical records match criteria.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 3rem; color: var(--text-tertiary);">No records found. Adjust your filters.</td></tr>';
         document.getElementById('page-info').textContent = 'No records';
         return;
       }
@@ -817,20 +931,20 @@
       pageData.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="badge">${(r.phase_id || '').toUpperCase()}</span></td>
-          <td>${r.year || '—'}</td>
+          <td><span class="badge-phase">${(r.phase_id || '').toUpperCase()}</span></td>
+          <td style="font-weight: 500;">${r.year || '—'}</td>
           <td>${r.origin || '—'}</td>
           <td>${r.destination || '—'}</td>
-          <td style="font-family:var(--font-mono); font-size:0.8rem;">${r.hs_code || '—'}</td>
+          <td style="font-family: var(--font-mono); color: var(--text-secondary);">${r.hs_code || '—'}</td>
           <td title="${r.hs_desc || ''}">${r.hs_desc && r.hs_desc.length > 40 ? r.hs_desc.substring(0, 40) + '...' : (r.hs_desc || '—')}</td>
-          <td class="num-cell">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-          <td class="num-cell">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})}</td>
+          <td class="numeric" style="font-weight: 600;">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          <td class="numeric" style="color: var(--text-secondary);">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})}</td>
         `;
         tbody.appendChild(tr);
       });
 
       const total = STATE.filtered.length;
-      document.getElementById('page-info').textContent = `Records ${start + 1}–${Math.min(end, total)} of ${total.toLocaleString()}`;
+      document.getElementById('page-info').textContent = `Showing ${start + 1} to ${Math.min(end, total)} of ${total.toLocaleString()} entries`;
       document.getElementById('btn-prev').disabled = STATE.pagination.page === 1;
       document.getElementById('btn-next').disabled = end >= total;
     }
@@ -863,7 +977,7 @@
       });
 
       function updateBtnUI(t) {
-        document.getElementById('theme-icon').textContent = t === 'dark' ? '☀' : '🌙';
+        document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
         document.getElementById('theme-text').textContent = t === 'dark' ? 'Light Mode' : 'Dark Mode';
       }
     }
