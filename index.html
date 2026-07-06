@@ -3,310 +3,304 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geopolitical Metabolism | Research Publication</title>
+  <title>Geopolitical Metabolism | Interactive Research</title>
   <meta name="description" content="Ecologically Unequal Exchange in global Critical Raw Material supply chains.">
   
-  <!-- Carregamento da API do Google Charts -->
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- Carregamento do Apache ECharts (Substitui o Google Charts para permitir Zoom e maior fluidez) -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
   
-  <!-- Tipografia Editorial e de Dados (Google Fonts) -->
+  <!-- Tipografia Moderna e Limpa (Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     /* --------------------------------------------------------------------------
-       Sistema de Design Editorial & Variáveis Globais
+       Design System: Leve, Moderno e Espaçoso ("Clean UI")
        -------------------------------------------------------------------------- */
     :root {
-      /* Tema Claro - Estética de Jornal/Papel */
-      --color-bg: #fcfbf9;
-      --color-surface: #ffffff;
-      --color-text-main: #1a1a1a;
-      --color-text-muted: #595959;
-      --color-border-heavy: #1a1a1a;
-      --color-border-light: #e0dcd8;
-      --color-accent: #8b0000; /* Vermelho carmesim académico */
-      --color-accent-hover: #b22222;
-      --color-highlight: #f0ede8;
-
-      --font-serif: 'Merriweather', serif;
-      --font-sans: 'IBM Plex Sans', sans-serif;
-      --font-mono: 'IBM Plex Mono', monospace;
+      /* Tema Claro */
+      --bg-body: #f8fafc;
+      --bg-surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      
+      --font-family: 'Inter', system-ui, sans-serif;
+      --radius-md: 12px;
+      --radius-lg: 16px;
     }
 
     [data-theme="dark"] {
-      /* Tema Escuro - Estética de Terminal de Dados */
-      --color-bg: #121212;
-      --color-surface: #1a1a1a;
-      --color-text-main: #e6e6e6;
-      --color-text-muted: #999999;
-      --color-border-heavy: #e6e6e6;
-      --color-border-light: #333333;
-      --color-accent: #ff6b6b;
-      --color-accent-hover: #ff8787;
-      --color-highlight: #2a2a2a;
+      /* Tema Escuro (Tons suaves de azul ardósia, não agressivos) */
+      --bg-body: #0f172a;
+      --bg-surface: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --accent-color: #60a5fa;
+      --accent-hover: #93c5fd;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     }
 
     /* Reset Global */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--color-bg);
-      color: var(--color-text-main);
-      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      font-family: var(--font-family);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    .wrapper {
-      max-width: 1600px;
+    .container {
+      max-width: 1440px;
       margin: 0 auto;
       padding: 0 2rem;
     }
 
     /* --------------------------------------------------------------------------
-       Cabeçalho Editorial
+       Cabeçalho (Header)
        -------------------------------------------------------------------------- */
-    header.masthead {
-      padding: 3rem 0;
-      border-bottom: 4px solid var(--color-border-heavy);
+    header {
+      padding: 2.5rem 0;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1.5rem;
     }
 
-    .title-group { max-width: 900px; }
-    
-    .masthead h1 {
-      font-family: var(--font-serif);
+    .header-text h1 {
+      font-size: 1.8rem;
       font-weight: 700;
-      font-size: 2.75rem;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      color: var(--color-text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
     }
 
-    .masthead p.abstract {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 1.15rem;
-      color: var(--color-text-muted);
-      line-height: 1.5;
+    .header-text p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 700px;
     }
 
-    .btn-theme {
+    .theme-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* --------------------------------------------------------------------------
+       Barra de Filtros Leve
+       -------------------------------------------------------------------------- */
+    .filters-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .phase-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+    }
+
+    .phase-btn {
       background: transparent;
-      border: 1px solid var(--color-border-heavy);
-      color: var(--color-text-main);
-      font-family: var(--font-sans);
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 1px;
+      border: 1px solid transparent;
+      color: var(--text-muted);
       padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .btn-theme:hover {
-      background: var(--color-border-heavy);
-      color: var(--color-bg);
+    .phase-btn:hover { background: var(--bg-body); color: var(--text-main); }
+    .phase-btn.active {
+      background: var(--accent-color);
+      color: #ffffff;
     }
 
-    /* --------------------------------------------------------------------------
-       Barra de Ferramentas / Controlos
-       -------------------------------------------------------------------------- */
-    nav.toolbar {
-      background-color: var(--color-surface);
-      border-bottom: 2px solid var(--color-border-heavy);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .toolbar-grid {
+    .dropdowns-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
-      align-items: end;
     }
 
-    .control-group {
+    .dropdown-group {
       display: flex;
       flex-direction: column;
+      gap: 0.4rem;
     }
 
-    .control-group label {
-      font-size: 0.7rem;
+    .dropdown-group label {
+      font-size: 0.75rem;
       text-transform: uppercase;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      color: var(--color-text-muted);
-      margin-bottom: 0.4rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
     }
 
     select, input[type="text"] {
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--color-border-light);
-      border-radius: 0;
-      padding: 0.5rem 0;
-      color: var(--color-text-main);
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 500;
+      background-color: var(--bg-body);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-family: var(--font-family);
+      font-size: 0.9rem;
       outline: none;
       cursor: pointer;
       transition: border-color 0.2s;
     }
     
     select:focus, input[type="text"]:focus {
-      border-bottom-color: var(--color-accent);
-    }
-
-    /* Tabs de Fase */
-    .phase-tabs {
-      grid-column: 1 / -1;
-      display: flex;
-      gap: 1rem;
-      border-bottom: 1px solid var(--color-border-light);
-      padding-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .tab-item {
-      background: none;
-      border: 1px solid transparent;
-      padding: 0.4rem 0.8rem;
-      font-family: var(--font-sans);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text-muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tab-item:hover { color: var(--color-text-main); }
-    .tab-item.active {
-      color: var(--color-accent);
-      border: 1px solid var(--color-border-heavy);
+      border-color: var(--accent-color);
     }
 
     /* --------------------------------------------------------------------------
-       Bloco de Estatísticas (KPIs)
+       Cartões de KPIs (Métricas)
        -------------------------------------------------------------------------- */
-    .kpi-section {
+    .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      padding: 2.5rem 0;
-      border-bottom: 1px solid var(--color-border-light);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
-    .kpi-box {
-      display: flex;
-      flex-direction: column;
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
     }
 
-    .kpi-box .label {
-      font-size: 0.75rem;
+    .kpi-card h3 {
+      font-size: 0.8rem;
       text-transform: uppercase;
+      color: var(--text-muted);
       font-weight: 600;
-      color: var(--color-text-muted);
       margin-bottom: 0.5rem;
     }
 
-    .kpi-box .value {
-      font-family: var(--font-mono);
-      font-size: 2.25rem;
-      font-weight: 500;
-      color: var(--color-text-main);
-      line-height: 1;
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-main);
     }
 
-    .kpi-box .sub-value {
+    .kpi-sub {
       font-size: 0.85rem;
-      color: var(--color-text-muted);
-      margin-top: 0.5rem;
-      font-family: var(--font-serif);
-      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
     }
 
     /* --------------------------------------------------------------------------
-       Visualizações de Dados
+       Área dos Gráficos ECharts
        -------------------------------------------------------------------------- */
-    .visualizations {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      padding: 3rem 0;
-    }
-
-    .chart-block {
-      width: 100%;
+    .chart-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
     }
 
     .chart-header {
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--color-border-light);
-      padding-bottom: 0.5rem;
-    }
-
-    .chart-title {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      color: var(--color-text-main);
-    }
-
-    .chart-wrapper {
-      width: 100%;
-      min-height: 550px;
-      background-color: var(--color-surface);
-      border: 1px solid var(--color-border-light);
-      padding: 1rem;
-    }
-
-    .bar-wrapper { min-height: 400px; }
-
-    /* --------------------------------------------------------------------------
-       Tabela de Dados Strict
-       -------------------------------------------------------------------------- */
-    .data-table-section {
-      padding: 3rem 0 5rem;
-    }
-
-    .table-tools {
+      margin-bottom: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+    }
+
+    .chart-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .zoom-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-body);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .echarts-container {
+      width: 100%;
+      height: 600px; /* Altura generosa para o Sankey */
+    }
+
+    .bar-container {
+      height: 400px;
+    }
+
+    /* --------------------------------------------------------------------------
+       Tabela de Dados Limpa
+       -------------------------------------------------------------------------- */
+    .table-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 4rem;
+    }
+
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .btn-export {
-      background: var(--color-border-heavy);
-      color: var(--color-bg);
+      background: var(--accent-color);
+      color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 500;
       cursor: pointer;
       transition: background 0.2s;
     }
+    .btn-export:hover { background: var(--accent-hover); }
 
-    .btn-export:hover { background: var(--color-accent); }
-
-    .table-container {
-      width: 100%;
+    .table-wrapper {
       overflow-x: auto;
-      border-top: 2px solid var(--color-border-heavy);
-      border-bottom: 2px solid var(--color-border-heavy);
     }
 
     table {
@@ -316,294 +310,280 @@
     }
 
     th {
-      font-family: var(--font-sans);
+      background: var(--bg-body);
+      padding: 1rem;
       font-size: 0.75rem;
       text-transform: uppercase;
       font-weight: 600;
-      color: var(--color-text-main);
-      padding: 1rem;
-      border-bottom: 1px solid var(--color-border-heavy);
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
       cursor: pointer;
       white-space: nowrap;
     }
-
-    th:hover { color: var(--color-accent); }
+    th:hover { color: var(--accent-color); }
 
     td {
       padding: 1rem;
       font-size: 0.85rem;
-      color: var(--color-text-main);
-      border-bottom: 1px solid var(--color-border-light);
+      border-bottom: 1px solid var(--border-color);
       white-space: nowrap;
     }
 
-    tr:hover td { background-color: var(--color-highlight); }
+    tr:hover td { background-color: var(--bg-body); }
     tr:last-child td { border-bottom: none; }
 
-    .col-num {
-      text-align: right;
-      font-family: var(--font-mono);
-    }
+    .col-num { font-variant-numeric: tabular-nums; text-align: right; }
 
-    .table-footer {
+    .pagination {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 1.5rem;
       padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
     }
 
-    .pagination span { font-size: 0.85rem; color: var(--color-text-muted); }
+    .page-info { font-size: 0.85rem; color: var(--text-muted); }
 
-    .pagination-buttons button {
-      background: transparent;
-      border: 1px solid var(--color-border-heavy);
-      color: var(--color-text-main);
-      padding: 0.3rem 0.6rem;
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      cursor: pointer;
+    .page-btns button {
+      background: var(--bg-body);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
       margin-left: 0.5rem;
+      cursor: pointer;
     }
-    
-    .pagination-buttons button:disabled { opacity: 0.3; cursor: not-allowed; }
-    .pagination-buttons button:not(:disabled):hover { background: var(--color-border-heavy); color: var(--color-bg); }
+    .page-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .page-btns button:not(:disabled):hover { border-color: var(--accent-color); }
 
     /* --------------------------------------------------------------------------
-       Estados de Carregamento e Erro
+       Ecrã de Loading e Erros
        -------------------------------------------------------------------------- */
     #loader {
-      position: fixed; inset: 0;
-      background: var(--color-bg);
+      position: fixed; inset: 0; background: var(--bg-body);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       z-index: 9999;
     }
 
-    .loader-text {
-      font-family: var(--font-serif); font-size: 1.5rem;
-      margin-bottom: 1rem; animation: pulse 1.5s infinite;
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border-color); border-top-color: var(--accent-color);
+      border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      background: var(--bg-surface); border: 1px solid #ef4444; padding: 2rem;
+      border-radius: var(--radius-lg); text-align: center; display: none; max-width: 500px;
     }
 
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-    .error-panel {
-      border: 2px solid var(--color-accent);
-      padding: 2rem; max-width: 600px;
-      text-align: center; display: none;
-    }
-
-    /* Responsividade */
-    @media (max-width: 900px) {
-      .masthead h1 { font-size: 2rem; }
-      .table-tools { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .search-box { width: 100%; }
+    @media (max-width: 768px) {
+      .header-text h1 { font-size: 1.5rem; }
+      .dropdowns-grid { grid-template-columns: 1fr; }
+      .chart-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ecrã de Carregamento Inicial -->
+  <!-- Loading Overlay -->
   <div id="loader">
-    <div id="loader-content">
-      <div class="loader-text">Compiling Research Data...</div>
-      <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-text-muted); text-align: center;">Parsing UN Comtrade Database</div>
+    <div id="loader-content" style="text-align: center;">
+      <div class="spinner" style="margin: 0 auto 1rem;"></div>
+      <h2 style="font-size: 1.2rem; font-weight: 600;">Initializing Data Engine</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Loading Comtrade Database...</p>
     </div>
-    
-    <!-- Painel de Erro (Oculto por defeito) -->
-    <div id="error-panel" class="error-panel">
-      <h2 style="font-family: var(--font-serif); color: var(--color-accent); margin-bottom: 1rem;">System Error</h2>
-      <p style="margin-bottom: 1.5rem;">The underlying dataset <code>database_complete.json</code> could not be established. Verify deployment environment (GitHub Pages required, local file:// protocol blocked).</p>
-      <button onclick="location.reload()" class="btn-export">Retry Connection</button>
+    <div id="error-panel" class="error-msg">
+      <h3 style="color: #ef4444; margin-bottom: 0.5rem;">Connection Error</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">Could not load <code>database_complete.json</code>. Ensure you are using a web server or GitHub Pages.</p>
+      <button onclick="location.reload()" class="btn-export">Retry</button>
     </div>
   </div>
 
-  <!-- Cabeçalho Principal (Masthead) -->
-  <header class="masthead wrapper">
-    <div class="title-group">
-      <h1>Geopolitical Metabolism &<br>Ecologically Unequal Exchange</h1>
-      <p class="abstract">An empirical mapping of the structural trade hierarchy driving the European Green Deal. Analysis of extraction, chemical funneling, and technological monopolization of Critical Raw Materials (2018–2023).</p>
-    </div>
-    <button id="theme-switcher" class="btn-theme">Toggle Dark Mode</button>
-  </header>
+  <div class="container">
+    <header>
+      <div class="header-text">
+        <h1>Geopolitical Metabolism & Ecologically Unequal Exchange</h1>
+        <p>Interactive mapping of Critical Raw Material flows driving the global energy transition.</p>
+      </div>
+      <button id="theme-switcher" class="theme-btn">🌙 Dark Mode</button>
+    </header>
 
-  <!-- Barra Horizontal de Filtros Analíticos -->
-  <nav class="toolbar">
-    <div class="wrapper">
-      <div class="phase-tabs" id="phase-container">
-        <button class="tab-item active" data-phase="ALL">Global Synthesis</button>
-        <button class="tab-item" data-phase="p1">Phase 1: Macro Raw Extraction</button>
-        <button class="tab-item" data-phase="p2">Phase 2: Refined Funnel</button>
-        <button class="tab-item" data-phase="p3a">Phase 3A: Tech (Batteries)</button>
-        <button class="tab-item" data-phase="p3b">Phase 3B: Tech (EVs)</button>
+    <!-- Filtros Leves e Flutuantes -->
+    <section class="filters-card">
+      <div class="phase-selector" id="phase-container">
+        <button class="phase-btn active" data-phase="ALL">Global Synthesis</button>
+        <button class="phase-btn" data-phase="p1">Phase 1: Raw Extraction</button>
+        <button class="phase-btn" data-phase="p2">Phase 2: Refined Funnel</button>
+        <button class="phase-btn" data-phase="p3a">Phase 3A: Tech (Batteries)</button>
+        <button class="phase-btn" data-phase="p3b">Phase 3B: Tech (EVs)</button>
       </div>
 
-      <div class="toolbar-grid" style="margin-top: 1rem;">
-        <div class="control-group">
-          <label>Temporal Range</label>
-          <select id="sel-year"><option value="ALL">All Recorded Years</option></select>
+      <div class="dropdowns-grid">
+        <div class="dropdown-group">
+          <label>Observation Year</label>
+          <select id="sel-year"><option value="ALL">All Years</option></select>
         </div>
-        <div class="control-group">
-          <label>Reporter Economy</label>
+        <div class="dropdown-group">
+          <label>Origin Reporter</label>
           <select id="sel-reporter"><option value="ALL">All Reporters</option></select>
         </div>
-        <div class="control-group">
-          <label>Partner Economy</label>
+        <div class="dropdown-group">
+          <label>Destination Partner</label>
           <select id="sel-partner"><option value="ALL">All Partners</option></select>
         </div>
-        <div class="control-group">
-          <label>HS Classification</label>
+        <div class="dropdown-group">
+          <label>Commodity Classification</label>
           <select id="sel-commodity"><option value="ALL">All Commodities</option></select>
         </div>
       </div>
-    </div>
-  </nav>
+    </section>
 
-  <main class="wrapper">
-    <!-- Indicadores Chave de Desempenho (KPIs) -->
-    <section class="kpi-section">
-      <div class="kpi-box">
-        <span class="label">Total Financial Valuation</span>
-        <span class="value" id="kpi-val-usd">$0.00</span>
-        <span class="sub-value">Nominal USD</span>
+    <!-- KPIs -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <h3>Total Trade Valuation</h3>
+        <div class="kpi-value" id="kpi-val-usd">$0.00</div>
+        <div class="kpi-sub">Nominal Value (USD)</div>
       </div>
-      <div class="kpi-box">
-        <span class="label">Total Physical Volume</span>
-        <span class="value" id="kpi-val-kg">0.00</span>
-        <span class="sub-value">Metric Tons (MT)</span>
+      <div class="kpi-card">
+        <h3>Physical Volume Executed</h3>
+        <div class="kpi-value" id="kpi-val-kg">0.00</div>
+        <div class="kpi-sub">Metric Tons (MT)</div>
       </div>
-      <div class="kpi-box">
-        <span class="label">Primary Origin Node</span>
-        <span class="value" id="kpi-origin" style="font-family: var(--font-sans); font-weight: 700;">—</span>
-        <span class="sub-value" id="kpi-origin-sub">Extractive Source</span>
+      <div class="kpi-card">
+        <h3>Primary Origin Hub</h3>
+        <div class="kpi-value" id="kpi-origin">—</div>
+        <div class="kpi-sub" id="kpi-origin-sub">Extractive Source</div>
       </div>
-      <div class="kpi-box">
-        <span class="label">Primary Destination Hub</span>
-        <span class="value" id="kpi-dest" style="font-family: var(--font-sans); font-weight: 700;">—</span>
-        <span class="sub-value" id="kpi-dest-sub">Import Sink</span>
+      <div class="kpi-card">
+        <h3>Primary Destination Sink</h3>
+        <div class="kpi-value" id="kpi-dest">—</div>
+        <div class="kpi-sub" id="kpi-dest-sub">Import Hub</div>
       </div>
     </section>
 
-    <!-- Gráficos de Visualização Analítica -->
-    <section class="visualizations">
-      <!-- Rede Sankey -->
-      <div class="chart-block">
-        <div class="chart-header">
-          <h2 class="chart-title">Fig 1. Structural Bilateral Trade Flows</h2>
-        </div>
-        <div id="chart-sankey" class="chart-wrapper"></div>
+    <!-- Gráfico Sankey (ECharts) com Zoom -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2>Structural Bilateral Trade Network</h2>
+        <span class="zoom-hint">🖱️ Scroll to Zoom | Drag to Pan</span>
       </div>
-
-      <!-- Distribuição por Commodity -->
-      <div class="chart-block">
-        <div class="chart-header">
-          <h2 class="chart-title">Fig 2. Commodity Valuation Composition</h2>
-        </div>
-        <div id="chart-bar" class="chart-wrapper bar-wrapper"></div>
-      </div>
+      <div id="echart-sankey" class="echarts-container"></div>
     </section>
 
-    <!-- Registo Empírico (Tabela) -->
-    <section class="data-table-section">
-      <div class="table-tools">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.5rem;">Empirical Data Registry</h2>
-          <div class="control-group search-box">
-            <input type="text" id="search-input" placeholder="Search specific actors or HS codes..." style="min-width: 300px;">
-          </div>
-        </div>
+    <!-- Gráfico de Barras (ECharts) -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2>Commodity Valuation Distribution</h2>
+      </div>
+      <div id="echart-bar" class="bar-container"></div>
+    </section>
+
+    <!-- Tabela -->
+    <section class="table-section">
+      <div class="table-controls">
+        <input type="text" id="search-input" placeholder="Search flows or HS codes..." style="min-width: 280px;">
         <button id="btn-export" class="btn-export">Export to CSV</button>
       </div>
 
-      <div class="table-container">
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th onclick="handleSort('phase_id')">Phase [⇅]</th>
-              <th onclick="handleSort('year')">Year [⇅]</th>
-              <th onclick="handleSort('origin')">Origin [⇅]</th>
-              <th onclick="handleSort('destination')">Destination [⇅]</th>
-              <th onclick="handleSort('hs_code')">HS Code [⇅]</th>
-              <th onclick="handleSort('hs_desc')">Commodity Description [⇅]</th>
-              <th class="col-num" onclick="handleSort('value_usd')">Value (USD) [⇅]</th>
-              <th class="col-num" onclick="handleSort('weight_kg')">Weight (KG) [⇅]</th>
+              <th onclick="handleSort('phase_id')">Phase ⇕</th>
+              <th onclick="handleSort('year')">Year ⇕</th>
+              <th onclick="handleSort('origin')">Origin Node ⇕</th>
+              <th onclick="handleSort('destination')">Destination Node ⇕</th>
+              <th onclick="handleSort('hs_code')">HS Code ⇕</th>
+              <th onclick="handleSort('hs_desc')">Commodity ⇕</th>
+              <th class="col-num" onclick="handleSort('value_usd')">Value (USD) ⇕</th>
+              <th class="col-num" onclick="handleSort('weight_kg')">Weight (KG) ⇕</th>
             </tr>
           </thead>
-          <tbody id="tbody-data">
-            <!-- Linhas geradas via JavaScript -->
-          </tbody>
+          <tbody id="tbody-data"></tbody>
         </table>
       </div>
 
-      <div class="table-footer">
-        <div class="pagination" id="pagination-info"><span>Showing 0 records</span></div>
-        <div class="pagination-buttons">
+      <div class="pagination">
+        <div class="page-info" id="pagination-info">Showing 0 records</div>
+        <div class="page-btns">
           <button id="btn-prev" onclick="handlePagination(-1)">Previous</button>
           <button id="btn-next" onclick="handlePagination(1)">Next</button>
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <script>
     // --------------------------------------------------------------------------
-    // Gestor de Estado Global da Aplicação
+    // Gestor de Estado da Aplicação
     // --------------------------------------------------------------------------
     const APP_STATE = {
       dataset: [],
       filtered: [],
       filters: { phase: 'ALL', year: 'ALL', reporter: 'ALL', partner: 'ALL', commodity: 'ALL', query: '' },
       sort: { column: 'value_usd', direction: 'desc' },
-      page: { current: 1, limit: 15 },
-      chartsReady: false
+      page: { current: 1, limit: 15 }
     };
 
-    // --------------------------------------------------------------------------
-    // Inicialização do Google Charts e Sistema Base
-    // --------------------------------------------------------------------------
-    google.charts.load('current', { 'packages': ['sankey', 'corechart'] });
-    google.charts.setOnLoadCallback(() => {
-      APP_STATE.chartsReady = true;
-      if (APP_STATE.dataset.length > 0) processAndRender();
-    });
+    // Instâncias do ECharts
+    let sankeyChartInstance = null;
+    let barChartInstance = null;
 
+    // Inicialização da página
     document.addEventListener('DOMContentLoaded', async () => {
       setupTheme();
+      initECharts();
       await fetchCoreData();
       attachDOMEvents();
     });
 
     // --------------------------------------------------------------------------
-    // Motor de Dados (Fetch & Indexação)
+    // Inicialização dos Gráficos ECharts
+    // --------------------------------------------------------------------------
+    function initECharts() {
+      // Cria as instâncias nas divs correspondentes
+      sankeyChartInstance = echarts.init(document.getElementById('echart-sankey'));
+      barChartInstance = echarts.init(document.getElementById('echart-bar'));
+
+      // Listener para tornar os gráficos responsivos (redimensionamento automático)
+      window.addEventListener('resize', () => {
+        if (sankeyChartInstance) sankeyChartInstance.resize();
+        if (barChartInstance) barChartInstance.resize();
+      });
+    }
+
+    // --------------------------------------------------------------------------
+    // Motor de Dados
     // --------------------------------------------------------------------------
     async function fetchCoreData() {
       try {
         const response = await fetch('database_complete.json');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
-        const data = await response.json();
-        APP_STATE.dataset = data;
+        APP_STATE.dataset = await response.json();
         
         document.getElementById('loader').style.display = 'none';
         buildDropdowns();
         executeFilters();
       } catch (err) {
-        console.error('Data Engine Failure:', err);
+        console.error('Data Load Error:', err);
         document.getElementById('loader-content').style.display = 'none';
         document.getElementById('error-panel').style.display = 'block';
       }
     }
 
-    // --------------------------------------------------------------------------
-    // Construção Dinâmica dos Controlos (UI)
-    // --------------------------------------------------------------------------
     function buildDropdowns() {
-      const getUnique = (key) => [...new Set(APP_STATE.dataset.map(row => row[key]).filter(Boolean))].sort();
+      const getUnique = (key) => [...new Set(APP_STATE.dataset.map(r => r[key]).filter(Boolean))].sort();
       
       const injectOptions = (targetId, arr) => {
         const selectEl = document.getElementById(targetId);
         arr.forEach(val => {
           const opt = document.createElement('option');
           opt.value = val;
-          opt.textContent = String(val).length > 60 ? String(val).substring(0, 60) + '...' : val;
+          opt.textContent = String(val).length > 50 ? String(val).substring(0, 50) + '...' : val;
           selectEl.appendChild(opt);
         });
       };
@@ -615,17 +595,15 @@
     }
 
     function attachDOMEvents() {
-      // Navegação por Fases
-      document.querySelectorAll('.tab-item').forEach(btn => {
+      document.querySelectorAll('.phase-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
           e.target.classList.add('active');
           APP_STATE.filters.phase = e.target.getAttribute('data-phase');
           executeFilters();
         });
       });
 
-      // Selects
       ['year', 'reporter', 'partner', 'commodity'].forEach(f => {
         document.getElementById(`sel-${f}`).addEventListener('change', (e) => {
           APP_STATE.filters[f] = e.target.value;
@@ -633,7 +611,6 @@
         });
       });
 
-      // Caixa de Pesquisa e Exportação
       document.getElementById('search-input').addEventListener('input', (e) => {
         APP_STATE.filters.query = e.target.value.toLowerCase();
         APP_STATE.page.current = 1;
@@ -641,19 +618,10 @@
       });
 
       document.getElementById('btn-export').addEventListener('click', generateCSV);
-
-      // Redimensionamento de Gráficos Responsivo
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          if (APP_STATE.chartsReady && APP_STATE.filtered.length > 0) renderVisualizations();
-        }, 200);
-      });
     }
 
     // --------------------------------------------------------------------------
-    // Lógica de Filtragem e Ordenação
+    // Filtragem e Processamento Central
     // --------------------------------------------------------------------------
     function executeFilters() {
       APP_STATE.filtered = APP_STATE.dataset.filter(row => {
@@ -671,7 +639,6 @@
         return true;
       });
 
-      // Aplicação da Ordenação
       APP_STATE.filtered.sort((a, b) => {
         const valA = a[APP_STATE.sort.column];
         const valB = b[APP_STATE.sort.column];
@@ -682,7 +649,183 @@
       });
 
       APP_STATE.page.current = 1;
-      processAndRender();
+      calculateKPIs();
+      updateECharts();
+      renderTable();
+    }
+
+    // --------------------------------------------------------------------------
+    // Integração dos Gráficos ECharts (Com Zoom e Drag)
+    // --------------------------------------------------------------------------
+    function updateECharts() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const textColor = isDark ? '#f1f5f9' : '#0f172a';
+      const gridColor = isDark ? '#334155' : '#e2e8f0';
+      const accentColor = isDark ? '#60a5fa' : '#3b82f6';
+
+      // 1. Processamento de Dados para Sankey
+      const flowMap = {};
+      const uniqueNodes = new Set();
+      
+      APP_STATE.filtered.forEach(r => {
+        if (!r.origin || !r.destination || r.value_usd <= 0) return;
+        // Previne ciclos (A->B, B->A) adicionando sufixos invisíveis na lógica, visíveis no tooltip
+        const sourceName = `${r.origin} [Orig]`;
+        const targetName = `${r.destination} [Dest]`;
+        
+        const hash = `${sourceName}____${targetName}`;
+        flowMap[hash] = (flowMap[hash] || 0) + r.value_usd;
+        
+        uniqueNodes.add(sourceName);
+        uniqueNodes.add(targetName);
+      });
+
+      const nodes = Array.from(uniqueNodes).map(name => ({ name }));
+      const links = Object.entries(flowMap).map(([key, value]) => {
+        const [source, target] = key.split('____');
+        return { source, target, value };
+      });
+
+      if (nodes.length === 0) {
+        sankeyChartInstance.clear();
+        barChartInstance.clear();
+        return;
+      }
+
+      // Configuração avançada do Sankey (Permite Zoom/Roam)
+      const sankeyOption = {
+        tooltip: {
+          trigger: 'item',
+          triggerOn: 'mousemove',
+          formatter: function (params) {
+            if(params.dataType === 'node') return `${params.name}: $${params.value.toLocaleString()}`;
+            return `${params.data.source} ➔ ${params.data.target}<br/><b>$${params.data.value.toLocaleString()}</b>`;
+          }
+        },
+        series: [{
+          type: 'sankey',
+          layout: 'none',
+          data: nodes,
+          links: links,
+          roam: true, // HABILITA ZOOM E DRAG NO GRÁFICO (REQUISITO PRINCIPAL)
+          nodeAlign: 'justify',
+          nodeWidth: 15,
+          nodeGap: 15,
+          emphasis: { focus: 'adjacency' },
+          lineStyle: {
+            color: 'gradient',
+            curveness: 0.5,
+            opacity: 0.3
+          },
+          label: {
+            color: textColor,
+            fontFamily: 'Inter',
+            fontSize: 12,
+            formatter: (params) => params.name.replace(' [Orig]', '').replace(' [Dest]', '')
+          }
+        }]
+      };
+
+      sankeyChartInstance.setOption(sankeyOption, true);
+
+      // 2. Processamento de Dados para o Gráfico de Barras
+      const commMap = {};
+      APP_STATE.filtered.forEach(r => {
+        if (!r.hs_desc) return;
+        const lbl = r.hs_desc.length > 35 ? r.hs_desc.substring(0, 35) + '...' : r.hs_desc;
+        commMap[lbl] = (commMap[lbl] || 0) + (r.value_usd || 0);
+      });
+
+      const sortedComms = Object.entries(commMap)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0,6)
+        .reverse(); // Echarts desenha barras de baixo para cima
+
+      const barOption = {
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
+        xAxis: { 
+          type: 'value', 
+          splitLine: { lineStyle: { color: gridColor } },
+          axisLabel: { color: textColor, fontFamily: 'Inter' }
+        },
+        yAxis: { 
+          type: 'category', 
+          data: sortedComms.map(item => item[0]),
+          axisLabel: { color: textColor, fontFamily: 'Inter', width: 200, overflow: 'truncate' }
+        },
+        series: [{
+          type: 'bar',
+          data: sortedComms.map(item => item[1]),
+          itemStyle: { color: accentColor, borderRadius: [0, 4, 4, 0] }
+        }]
+      };
+
+      barChartInstance.setOption(barOption, true);
+    }
+
+    // --------------------------------------------------------------------------
+    // Atualização de Tabelas e Métricas
+    // --------------------------------------------------------------------------
+    function calculateKPIs() {
+      let tUSD = 0, tKG = 0;
+      const mapOrigin = {}, mapDest = {};
+
+      APP_STATE.filtered.forEach(r => {
+        tUSD += r.value_usd || 0;
+        tKG += r.weight_kg || 0;
+        if (r.origin) mapOrigin[r.origin] = (mapOrigin[r.origin] || 0) + (r.value_usd || 0);
+        if (r.destination) mapDest[r.destination] = (mapDest[r.destination] || 0) + (r.value_usd || 0);
+      });
+
+      const fmtCur = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
+      const fmtWgt = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})}`;
+
+      const topOrig = Object.entries(mapOrigin).sort((a,b) => b[1]-a[1])[0];
+      const topDest = Object.entries(mapDest).sort((a,b) => b[1]-a[1])[0];
+
+      document.getElementById('kpi-val-usd').textContent = fmtCur(tUSD);
+      document.getElementById('kpi-val-kg').textContent = fmtWgt(tKG);
+      document.getElementById('kpi-origin').textContent = topOrig ? topOrig[0] : '—';
+      document.getElementById('kpi-origin-sub').textContent = topOrig ? fmtCur(topOrig[1]) : '';
+      document.getElementById('kpi-dest').textContent = topDest ? topDest[0] : '—';
+      document.getElementById('kpi-dest-sub').textContent = topDest ? fmtCur(topDest[1]) : '';
+    }
+
+    function renderTable() {
+      const tb = document.getElementById('tbody-data');
+      tb.innerHTML = '';
+
+      const idxStart = (APP_STATE.page.current - 1) * APP_STATE.page.limit;
+      const idxEnd = idxStart + APP_STATE.page.limit;
+      const chunk = APP_STATE.filtered.slice(idxStart, idxEnd);
+
+      if (chunk.length === 0) {
+        tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem; color: var(--text-muted);">No records found.</td></tr>';
+        document.getElementById('pagination-info').textContent = 'No records';
+        return;
+      }
+
+      chunk.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span style="background:var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${(r.phase_id || '').toUpperCase()}</span></td>
+          <td>${r.year || '—'}</td>
+          <td style="font-weight:500;">${r.origin || '—'}</td>
+          <td style="font-weight:500;">${r.destination || '—'}</td>
+          <td style="color: var(--text-muted); font-size: 0.8rem;">${r.hs_code || '—'}</td>
+          <td title="${r.hs_desc}">${r.hs_desc && r.hs_desc.length > 35 ? r.hs_desc.substring(0,35)+'...' : (r.hs_desc || '—')}</td>
+          <td class="col-num" style="font-weight:500;">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td class="col-num" style="color: var(--text-muted);">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits:1, maximumFractionDigits:1})}</td>
+        `;
+        tb.appendChild(tr);
+      });
+
+      const total = APP_STATE.filtered.length;
+      document.getElementById('pagination-info').textContent = `Showing ${idxStart + 1} to ${Math.min(idxEnd, total)} of ${total.toLocaleString()} entries`;
+      
+      document.getElementById('btn-prev').disabled = APP_STATE.page.current === 1;
+      document.getElementById('btn-next').disabled = idxEnd >= total;
     }
 
     function handleSort(col) {
@@ -701,148 +844,6 @@
       renderTable();
     }
 
-    // --------------------------------------------------------------------------
-    // Motores de Renderização
-    // --------------------------------------------------------------------------
-    function processAndRender() {
-      calculateKPIs();
-      if (APP_STATE.chartsReady) renderVisualizations();
-      renderTable();
-    }
-
-    function calculateKPIs() {
-      let tUSD = 0, tKG = 0;
-      const mapOrigin = {}, mapDest = {};
-
-      APP_STATE.filtered.forEach(r => {
-        tUSD += r.value_usd || 0;
-        tKG += r.weight_kg || 0;
-        if (r.origin) mapOrigin[r.origin] = (mapOrigin[r.origin] || 0) + (r.value_usd || 0);
-        if (r.destination) mapDest[r.destination] = (mapDest[r.destination] || 0) + (r.value_usd || 0);
-      });
-
-      const formatCur = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
-      const formatWgt = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})}`;
-
-      const topOrig = Object.entries(mapOrigin).sort((a,b) => b[1]-a[1])[0];
-      const topDest = Object.entries(mapDest).sort((a,b) => b[1]-a[1])[0];
-
-      document.getElementById('kpi-val-usd').textContent = formatCur(tUSD);
-      document.getElementById('kpi-val-kg').textContent = formatWgt(tKG);
-      
-      document.getElementById('kpi-origin').textContent = topOrig ? topOrig[0] : '—';
-      document.getElementById('kpi-origin-sub').textContent = topOrig ? formatCur(topOrig[1]) : '';
-      
-      document.getElementById('kpi-dest').textContent = topDest ? topDest[0] : '—';
-      document.getElementById('kpi-dest-sub').textContent = topDest ? formatCur(topDest[1]) : '';
-    }
-
-    function renderVisualizations() {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const colorText = isDark ? '#e6e6e6' : '#1a1a1a';
-      const colorLine = isDark ? '#333333' : '#e0dcd8';
-      const colorAccent = isDark ? '#ff8787' : '#8b0000';
-
-      const elSankey = document.getElementById('chart-sankey');
-      const elBar = document.getElementById('chart-bar');
-
-      if (APP_STATE.filtered.length === 0) {
-        elSankey.innerHTML = '<p style="text-align:center; padding:3rem; font-family:var(--font-mono);">No metabolic flows recorded for current parameters.</p>';
-        elBar.innerHTML = '';
-        return;
-      }
-
-      // --- Sankey ---
-      const flowMap = {};
-      APP_STATE.filtered.forEach(r => {
-        if (!r.origin || !r.destination) return;
-        const hash = `${r.origin} (Org)____${r.destination} (Dst)`;
-        flowMap[hash] = (flowMap[hash] || 0) + (r.value_usd || 0);
-      });
-
-      const dtSankey = new google.visualization.DataTable();
-      dtSankey.addColumn('string', 'Origin');
-      dtSankey.addColumn('string', 'Destination');
-      dtSankey.addColumn('number', 'Valuation');
-      Object.entries(flowMap).forEach(([k, v]) => dtSankey.addRow([...k.split('____'), v]));
-
-      // Cores Académicas e Sóbrias para o Sankey
-      const colors = ['#1a1a1a', '#404040', '#737373', '#8b0000', '#2d4c7a', '#5c4e3a'];
-
-      new google.visualization.Sankey(elSankey).draw(dtSankey, {
-        sankey: {
-          node: { 
-            label: { fontName: 'IBM Plex Sans', fontSize: 13, color: colorText }, 
-            colors: isDark ? ['#e6e6e6', '#999', '#ff6b6b', '#4da6ff', '#f5b041'] : colors,
-            nodePadding: 25, width: 10 
-          },
-          link: { colorMode: 'gradient' }
-        },
-        tooltip: { textStyle: { fontName: 'IBM Plex Sans' } }
-      });
-
-      // --- Bar Chart ---
-      const commMap = {};
-      APP_STATE.filtered.forEach(r => {
-        if (!r.hs_desc) return;
-        const lbl = r.hs_desc.length > 45 ? r.hs_desc.substring(0, 45) + '...' : r.hs_desc;
-        commMap[lbl] = (commMap[lbl] || 0) + (r.value_usd || 0);
-      });
-
-      const dtBar = new google.visualization.DataTable();
-      dtBar.addColumn('string', 'Commodity');
-      dtBar.addColumn('number', 'Valuation');
-      Object.entries(commMap).sort((a,b) => b[1]-a[1]).slice(0,6).forEach(([k,v]) => dtBar.addRow([k,v]));
-
-      new google.visualization.BarChart(elBar).draw(dtBar, {
-        backgroundColor: 'transparent',
-        legend: { position: 'none' },
-        chartArea: { width: '60%', height: '80%' },
-        hAxis: { textStyle: { color: colorText, fontName: 'IBM Plex Mono' }, gridlines: { color: colorLine } },
-        vAxis: { textStyle: { color: colorText, fontName: 'IBM Plex Sans', fontSize: 11 } },
-        colors: [colorAccent]
-      });
-    }
-
-    function renderTable() {
-      const tb = document.getElementById('tbody-data');
-      tb.innerHTML = '';
-
-      const idxStart = (APP_STATE.page.current - 1) * APP_STATE.page.limit;
-      const idxEnd = idxStart + APP_STATE.page.limit;
-      const chunk = APP_STATE.filtered.slice(idxStart, idxEnd);
-
-      if (chunk.length === 0) {
-        tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">Dataset empty for applied constraints.</td></tr>';
-        document.getElementById('pagination-info').innerHTML = '<span>No records to display</span>';
-        return;
-      }
-
-      chunk.forEach(r => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="font-family:var(--font-mono); font-size:0.75rem;">${(r.phase_id || '').toUpperCase()}</td>
-          <td>${r.year || '—'}</td>
-          <td style="font-weight:600;">${r.origin || '—'}</td>
-          <td style="font-weight:600;">${r.destination || '—'}</td>
-          <td style="font-family:var(--font-mono);">${r.hs_code || '—'}</td>
-          <td title="${r.hs_desc}">${r.hs_desc && r.hs_desc.length > 35 ? r.hs_desc.substring(0,35)+'...' : (r.hs_desc || '—')}</td>
-          <td class="col-num">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-          <td class="col-num">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits:1, maximumFractionDigits:1})}</td>
-        `;
-        tb.appendChild(tr);
-      });
-
-      const total = APP_STATE.filtered.length;
-      document.getElementById('pagination-info').innerHTML = `<span>Displaying records <strong>${idxStart + 1}—${Math.min(idxEnd, total)}</strong> of <strong>${total.toLocaleString()}</strong></span>`;
-      
-      document.getElementById('btn-prev').disabled = APP_STATE.page.current === 1;
-      document.getElementById('btn-next').disabled = idxEnd >= total;
-    }
-
-    // --------------------------------------------------------------------------
-    // Funcionalidades de Exportação e Interface (Tema)
-    // --------------------------------------------------------------------------
     function generateCSV() {
       if (APP_STATE.filtered.length === 0) return;
       const header = ['Phase', 'Year', 'Origin', 'Destination', 'Flow', 'HS_Code', 'Commodity', 'Value_USD', 'Weight_KG'];
@@ -859,16 +860,24 @@
 
     function setupTheme() {
       const btn = document.getElementById('theme-switcher');
-      const saved = localStorage.getItem('theme_editorial') || 'light';
+      const saved = localStorage.getItem('theme_clean') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
+      updateBtnUI(saved);
       
       btn.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme_editorial', next);
-        if (APP_STATE.chartsReady) renderVisualizations();
+        localStorage.setItem('theme_clean', next);
+        updateBtnUI(next);
+        
+        // Atualiza as cores do ECharts ao trocar de tema
+        if (sankeyChartInstance) updateECharts();
       });
+      
+      function updateBtnUI(t) {
+        btn.textContent = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      }
     }
   </script>
 </body>
