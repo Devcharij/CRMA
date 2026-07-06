@@ -1,407 +1,312 @@
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geopolitical Metabolism | Interactive Research</title>
-  <meta name="description" content="Academic research platform visualizing the Geopolitical Metabolism and Ecologically Unequal Exchange in global Critical Raw Material supply chains.">
+  <title>Geopolitical Metabolism | Research Publication</title>
+  <meta name="description" content="Ecologically Unequal Exchange in global Critical Raw Material supply chains.">
+  
+  <!-- Carregamento da API do Google Charts -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   
-  <!-- Premium Typography -->
+  <!-- Tipografia Editorial e de Dados (Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
   
   <style>
-    /* ==========================================================================
-       Premium Design System & Variables
-       ========================================================================== */
+    /* --------------------------------------------------------------------------
+       Sistema de Design Editorial & Variáveis Globais
+       -------------------------------------------------------------------------- */
     :root {
-      /* Light Theme (Clean, spacious, high-contrast) */
-      --bg-body: #f4f5f7;
-      --bg-card: #ffffff;
-      --bg-input: #f9fafb;
-      --bg-hover: #f3f4f6;
-      --bg-glass: rgba(255, 255, 255, 0.85);
-      
-      --text-primary: #111827;
-      --text-secondary: #4b5563;
-      --text-tertiary: #9ca3af;
-      
-      --border-color: #e5e7eb;
-      --border-focus: #cbd5e1;
-      
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-muted: #dbeafe;
-      
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-      
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
+      /* Tema Claro - Estética de Jornal/Papel */
+      --color-bg: #fcfbf9;
+      --color-surface: #ffffff;
+      --color-text-main: #1a1a1a;
+      --color-text-muted: #595959;
+      --color-border-heavy: #1a1a1a;
+      --color-border-light: #e0dcd8;
+      --color-accent: #8b0000; /* Vermelho carmesim académico */
+      --color-accent-hover: #b22222;
+      --color-highlight: #f0ede8;
+
+      --font-serif: 'Merriweather', serif;
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
     }
 
     [data-theme="dark"] {
-      /* Dark Theme (Deep slate, low eye strain, elegant) */
-      --bg-body: #0b0f19;
-      --bg-card: #111827;
-      --bg-input: #1f2937;
-      --bg-hover: #374151;
-      --bg-glass: rgba(17, 24, 39, 0.85);
-      
-      --text-primary: #f9fafb;
-      --text-secondary: #9ca3af;
-      --text-tertiary: #6b7280;
-      
-      --border-color: #374151;
-      --border-focus: #4b5563;
-      
-      --accent: #3b82f6;
-      --accent-hover: #60a5fa;
-      --accent-muted: #1e3a8a;
-      
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      /* Tema Escuro - Estética de Terminal de Dados */
+      --color-bg: #121212;
+      --color-surface: #1a1a1a;
+      --color-text-main: #e6e6e6;
+      --color-text-muted: #999999;
+      --color-border-heavy: #e6e6e6;
+      --color-border-light: #333333;
+      --color-accent: #ff6b6b;
+      --color-accent-hover: #ff8787;
+      --color-highlight: #2a2a2a;
     }
 
-    /* ==========================================================================
-       Global Resets & Base
-       ========================================================================== */
+    /* Reset Global */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+
     body {
-      background-color: var(--bg-body);
-      color: var(--text-primary);
+      background-color: var(--color-bg);
+      color: var(--color-text-main);
       font-family: var(--font-sans);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .container {
-      max-width: 1440px;
+    .wrapper {
+      max-width: 1600px;
       margin: 0 auto;
       padding: 0 2rem;
     }
 
-    /* ==========================================================================
-       Top Navigation & Header
-       ========================================================================== */
-    .top-nav {
+    /* --------------------------------------------------------------------------
+       Cabeçalho Editorial
+       -------------------------------------------------------------------------- */
+    header.masthead {
+      padding: 3rem 0;
+      border-bottom: 4px solid var(--color-border-heavy);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .title-group { max-width: 900px; }
+    
+    .masthead h1 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 2.75rem;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      color: var(--color-text-main);
+    }
+
+    .masthead p.abstract {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .btn-theme {
+      background: transparent;
+      border: 1px solid var(--color-border-heavy);
+      color: var(--color-text-main);
+      font-family: var(--font-sans);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-theme:hover {
+      background: var(--color-border-heavy);
+      color: var(--color-bg);
+    }
+
+    /* --------------------------------------------------------------------------
+       Barra de Ferramentas / Controlos
+       -------------------------------------------------------------------------- */
+    nav.toolbar {
+      background-color: var(--color-surface);
+      border-bottom: 2px solid var(--color-border-heavy);
+      padding: 1rem 0;
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: var(--bg-glass);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 0;
+      z-index: 100;
     }
 
-    .nav-inner {
+    .toolbar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      align-items: end;
+    }
+
+    .control-group {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
     }
 
-    .brand {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-weight: 700;
+    .control-group label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 600;
       letter-spacing: 0.5px;
-      color: var(--text-primary);
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
     }
 
-    .theme-btn {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      font-family: var(--font-sans);
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-    
-    .theme-btn:hover { background: var(--bg-hover); transform: translateY(-1px); }
-
-    .hero-section {
-      padding: 4rem 0 3rem;
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hero-title {
-      font-family: var(--font-serif);
-      font-size: 3rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-      color: var(--text-primary);
-    }
-
-    .hero-subtitle {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    /* ==========================================================================
-       Interactive Filter Dashboard
-       ========================================================================== */
-    .control-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-lg);
-      margin-bottom: 3rem;
-      transform: translateY(-20px);
-    }
-
-    /* Segmented Control for Phases */
-    .segmented-control {
-      display: flex;
-      background: var(--bg-input);
-      padding: 0.25rem;
-      border-radius: var(--radius-md);
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-color);
-      overflow-x: auto;
-    }
-
-    .segment-btn {
-      flex: 1;
+    select, input[type="text"] {
+      width: 100%;
       background: transparent;
       border: none;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-sm);
+      border-bottom: 1px solid var(--color-border-light);
+      border-radius: 0;
+      padding: 0.5rem 0;
+      color: var(--color-text-main);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    
+    select:focus, input[type="text"]:focus {
+      border-bottom-color: var(--color-accent);
+    }
+
+    /* Tabs de Fase */
+    .phase-tabs {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--color-border-light);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-item {
+      background: none;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.8rem;
       font-family: var(--font-sans);
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--color-text-muted);
       cursor: pointer;
-      transition: all 0.3s ease;
-      white-space: nowrap;
+      transition: all 0.2s;
     }
 
-    .segment-btn:hover { color: var(--text-primary); }
-    
-    .segment-btn.active {
-      background: var(--bg-card);
-      color: var(--accent);
-      box-shadow: var(--shadow-sm);
+    .tab-item:hover { color: var(--color-text-main); }
+    .tab-item.active {
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-heavy);
     }
 
-    /* Select Grids */
-    .filter-grid {
+    /* --------------------------------------------------------------------------
+       Bloco de Estatísticas (KPIs)
+       -------------------------------------------------------------------------- */
+    .kpi-section {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--color-border-light);
     }
 
-    .filter-item {
+    .kpi-box {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
     }
 
-    .filter-item label {
+    .kpi-box .label {
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
       font-weight: 600;
-      color: var(--text-tertiary);
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
     }
 
-    select {
-      appearance: none;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-      transition: all 0.2s;
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239ca3af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem top 50%;
-      background-size: 0.65rem auto;
-    }
-
-    select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-muted);
-    }
-
-    /* ==========================================================================
-       KPI Cards Grid
-       ========================================================================== */
-    .kpi-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .kpi-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: var(--shadow-md);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .kpi-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-    }
-
-    .kpi-value {
-      font-family: var(--font-serif);
+    .kpi-box .value {
+      font-family: var(--font-mono);
       font-size: 2.25rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.1;
+      font-weight: 500;
+      color: var(--color-text-main);
+      line-height: 1;
     }
 
-    .kpi-desc {
+    .kpi-box .sub-value {
       font-size: 0.85rem;
-      color: var(--text-tertiary);
+      color: var(--color-text-muted);
       margin-top: 0.5rem;
+      font-family: var(--font-serif);
+      font-style: italic;
     }
 
-    /* ==========================================================================
-       Visualizations
-       ========================================================================== */
-    .chart-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 2rem;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 3rem;
+    /* --------------------------------------------------------------------------
+       Visualizações de Dados
+       -------------------------------------------------------------------------- */
+    .visualizations {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      padding: 3rem 0;
+    }
+
+    .chart-block {
+      width: 100%;
     }
 
     .chart-header {
-      margin-bottom: 2rem;
-      text-align: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border-light);
+      padding-bottom: 0.5rem;
     }
 
     .chart-title {
       font-family: var(--font-serif);
-      font-size: 1.75rem;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      color: var(--color-text-main);
     }
 
-    .chart-subtitle {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .sankey-wrapper {
+    .chart-wrapper {
       width: 100%;
-      min-height: 600px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      min-height: 550px;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      padding: 1rem;
     }
 
-    .bar-wrapper {
-      width: 100%;
-      min-height: 400px;
+    .bar-wrapper { min-height: 400px; }
+
+    /* --------------------------------------------------------------------------
+       Tabela de Dados Strict
+       -------------------------------------------------------------------------- */
+    .data-table-section {
+      padding: 3rem 0 5rem;
     }
 
-    /* ==========================================================================
-       Data Table
-       ========================================================================== */
-    .table-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      margin-bottom: 4rem;
-      overflow: hidden; /* Encapsulates the table completely */
-    }
-
-    .table-toolbar {
-      padding: 1.5rem 2rem;
-      border-bottom: 1px solid var(--border-color);
+    .table-tools {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .search-input {
-      padding: 0.6rem 1rem;
-      width: 300px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      background: var(--bg-input);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-muted);
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
     }
 
     .btn-export {
-      background: var(--accent);
-      color: #ffffff;
+      background: var(--color-border-heavy);
+      color: var(--color-bg);
       border: none;
-      padding: 0.6rem 1.25rem;
-      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
       font-weight: 600;
-      font-size: 0.85rem;
+      text-transform: uppercase;
       cursor: pointer;
       transition: background 0.2s;
     }
 
-    .btn-export:hover { background: var(--accent-hover); }
+    .btn-export:hover { background: var(--color-accent); }
 
-    .table-responsive {
+    .table-container {
       width: 100%;
       overflow-x: auto;
+      border-top: 2px solid var(--color-border-heavy);
+      border-bottom: 2px solid var(--color-border-heavy);
     }
 
     table {
@@ -411,575 +316,559 @@
     }
 
     th {
-      background: var(--bg-input);
-      padding: 1rem 1.5rem;
+      font-family: var(--font-sans);
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-secondary);
       font-weight: 600;
+      color: var(--color-text-main);
+      padding: 1rem;
+      border-bottom: 1px solid var(--color-border-heavy);
       cursor: pointer;
-      border-bottom: 1px solid var(--border-color);
       white-space: nowrap;
-      user-select: none;
     }
 
-    th:hover { color: var(--accent); }
+    th:hover { color: var(--color-accent); }
 
     td {
-      padding: 1rem 1.5rem;
-      font-size: 0.875rem;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border-color);
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: var(--color-text-main);
+      border-bottom: 1px solid var(--color-border-light);
       white-space: nowrap;
     }
 
-    tbody tr:hover { background: var(--bg-hover); }
-    
-    tbody tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: var(--color-highlight); }
+    tr:last-child td { border-bottom: none; }
 
-    .numeric { font-variant-numeric: tabular-nums; text-align: right; }
-
-    .badge-phase {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-secondary);
+    .col-num {
+      text-align: right;
+      font-family: var(--font-mono);
     }
 
     .table-footer {
-      padding: 1rem 2rem;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-top: 1rem;
     }
 
-    .pagination-info { font-size: 0.85rem; color: var(--text-secondary); }
+    .pagination span { font-size: 0.85rem; color: var(--color-text-muted); }
 
-    .pagination-btns button {
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 0.4rem 0.8rem;
-      border-radius: var(--radius-sm);
+    .pagination-buttons button {
+      background: transparent;
+      border: 1px solid var(--color-border-heavy);
+      color: var(--color-text-main);
+      padding: 0.3rem 0.6rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
       cursor: pointer;
-      font-size: 0.85rem;
       margin-left: 0.5rem;
-      font-weight: 500;
     }
     
-    .pagination-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .pagination-btns button:not(:disabled):hover { background: var(--bg-hover); }
+    .pagination-buttons button:disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-buttons button:not(:disabled):hover { background: var(--color-border-heavy); color: var(--color-bg); }
 
-    /* ==========================================================================
-       Loading & Error States
-       ========================================================================== */
-    #loading {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-body);
+    /* --------------------------------------------------------------------------
+       Estados de Carregamento e Erro
+       -------------------------------------------------------------------------- */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--color-bg);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       z-index: 9999;
     }
 
-    .spinner {
-      width: 48px; height: 48px;
-      border: 3px solid var(--border-color);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 1.5rem;
-    }
-    
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error-card {
-      background: var(--bg-card);
-      border: 1px solid #ef4444;
-      padding: 2rem;
-      border-radius: var(--radius-lg);
-      max-width: 500px;
-      text-align: center;
-      display: none;
-      box-shadow: var(--shadow-lg);
+    .loader-text {
+      font-family: var(--font-serif); font-size: 1.5rem;
+      margin-bottom: 1rem; animation: pulse 1.5s infinite;
     }
 
-    footer {
-      text-align: center;
-      padding: 3rem 0;
-      color: var(--text-tertiary);
-      font-size: 0.85rem;
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .error-panel {
+      border: 2px solid var(--color-accent);
+      padding: 2rem; max-width: 600px;
+      text-align: center; display: none;
     }
 
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .hero-title { font-size: 2.25rem; }
-      .segmented-control { flex-direction: column; }
-      .chart-section { padding: 1rem; }
-      .table-toolbar { flex-direction: column; align-items: stretch; }
-      .search-input { width: 100%; }
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .masthead h1 { font-size: 2rem; }
+      .table-tools { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .search-box { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Loading State -->
-  <div id="loading">
-    <div id="spinner-container" style="text-align: center;">
-      <div class="spinner" style="margin: 0 auto 1.5rem;"></div>
-      <h2 style="font-family: var(--font-serif); color: var(--text-primary); font-size: 1.5rem; margin-bottom: 0.5rem;">Processing Database</h2>
-      <p style="color: var(--text-secondary); font-size: 0.95rem;">UN Comtrade Extract (2018–2023)</p>
+  <!-- Ecrã de Carregamento Inicial -->
+  <div id="loader">
+    <div id="loader-content">
+      <div class="loader-text">Compiling Research Data...</div>
+      <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-text-muted); text-align: center;">Parsing UN Comtrade Database</div>
     </div>
-    <div id="error-message" class="error-card">
-      <h3 style="color: #ef4444; font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 1rem;">Connection Error</h3>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">The dataset <code>database_complete.json</code> could not be loaded. Please ensure you are viewing this via a web server or GitHub Pages.</p>
-      <button onclick="location.reload()" style="background: var(--text-primary); color: var(--bg-body); border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry Connection</button>
+    
+    <!-- Painel de Erro (Oculto por defeito) -->
+    <div id="error-panel" class="error-panel">
+      <h2 style="font-family: var(--font-serif); color: var(--color-accent); margin-bottom: 1rem;">System Error</h2>
+      <p style="margin-bottom: 1.5rem;">The underlying dataset <code>database_complete.json</code> could not be established. Verify deployment environment (GitHub Pages required, local file:// protocol blocked).</p>
+      <button onclick="location.reload()" class="btn-export">Retry Connection</button>
     </div>
   </div>
 
-  <!-- Sticky Navigation -->
-  <nav class="top-nav">
-    <div class="container nav-inner">
-      <div class="brand">Geopolitical Metabolism</div>
-      <button class="theme-btn" id="theme-toggle">
-        <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
-      </button>
+  <!-- Cabeçalho Principal (Masthead) -->
+  <header class="masthead wrapper">
+    <div class="title-group">
+      <h1>Geopolitical Metabolism &<br>Ecologically Unequal Exchange</h1>
+      <p class="abstract">An empirical mapping of the structural trade hierarchy driving the European Green Deal. Analysis of extraction, chemical funneling, and technological monopolization of Critical Raw Materials (2018–2023).</p>
+    </div>
+    <button id="theme-switcher" class="btn-theme">Toggle Dark Mode</button>
+  </header>
+
+  <!-- Barra Horizontal de Filtros Analíticos -->
+  <nav class="toolbar">
+    <div class="wrapper">
+      <div class="phase-tabs" id="phase-container">
+        <button class="tab-item active" data-phase="ALL">Global Synthesis</button>
+        <button class="tab-item" data-phase="p1">Phase 1: Macro Raw Extraction</button>
+        <button class="tab-item" data-phase="p2">Phase 2: Refined Funnel</button>
+        <button class="tab-item" data-phase="p3a">Phase 3A: Tech (Batteries)</button>
+        <button class="tab-item" data-phase="p3b">Phase 3B: Tech (EVs)</button>
+      </div>
+
+      <div class="toolbar-grid" style="margin-top: 1rem;">
+        <div class="control-group">
+          <label>Temporal Range</label>
+          <select id="sel-year"><option value="ALL">All Recorded Years</option></select>
+        </div>
+        <div class="control-group">
+          <label>Reporter Economy</label>
+          <select id="sel-reporter"><option value="ALL">All Reporters</option></select>
+        </div>
+        <div class="control-group">
+          <label>Partner Economy</label>
+          <select id="sel-partner"><option value="ALL">All Partners</option></select>
+        </div>
+        <div class="control-group">
+          <label>HS Classification</label>
+          <select id="sel-commodity"><option value="ALL">All Commodities</option></select>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="hero-section container">
-    <h1 class="hero-title">Ecologically Unequal Exchange in Critical Raw Materials</h1>
-    <p class="hero-subtitle">An interactive mapping of the structural trade hierarchy driving the European Green Deal. Explore the extraction, refinement, and technological monopolization of the global energy transition.</p>
-  </header>
-
-  <main class="container">
-    
-    <!-- Floating Filter Dashboard -->
-    <section class="control-panel">
-      <!-- iOS Style Segmented Control -->
-      <div class="segmented-control" id="phase-tabs">
-        <button class="segment-btn active" data-phase="ALL">Global Synthesis</button>
-        <button class="segment-btn" data-phase="p1">Phase 1: Raw Extraction</button>
-        <button class="segment-btn" data-phase="p2">Phase 2: Chemical Funnel</button>
-        <button class="segment-btn" data-phase="p3a">Phase 3A: Tech Batteries</button>
-        <button class="segment-btn" data-phase="p3b">Phase 3B: Tech EVs</button>
+  <main class="wrapper">
+    <!-- Indicadores Chave de Desempenho (KPIs) -->
+    <section class="kpi-section">
+      <div class="kpi-box">
+        <span class="label">Total Financial Valuation</span>
+        <span class="value" id="kpi-val-usd">$0.00</span>
+        <span class="sub-value">Nominal USD</span>
       </div>
-
-      <div class="filter-grid">
-        <div class="filter-item">
-          <label>Temporal Range</label>
-          <select id="filter-year"><option value="ALL">All Years</option></select>
-        </div>
-        <div class="filter-item">
-          <label>Reporting Economy</label>
-          <select id="filter-reporter"><option value="ALL">All Reporters</option></select>
-        </div>
-        <div class="filter-item">
-          <label>Trade Partner</label>
-          <select id="filter-partner"><option value="ALL">All Partners</option></select>
-        </div>
-        <div class="filter-item">
-          <label>Commodity Classification</label>
-          <select id="filter-commodity"><option value="ALL">All Commodities</option></select>
-        </div>
+      <div class="kpi-box">
+        <span class="label">Total Physical Volume</span>
+        <span class="value" id="kpi-val-kg">0.00</span>
+        <span class="sub-value">Metric Tons (MT)</span>
+      </div>
+      <div class="kpi-box">
+        <span class="label">Primary Origin Node</span>
+        <span class="value" id="kpi-origin" style="font-family: var(--font-sans); font-weight: 700;">—</span>
+        <span class="sub-value" id="kpi-origin-sub">Extractive Source</span>
+      </div>
+      <div class="kpi-box">
+        <span class="label">Primary Destination Hub</span>
+        <span class="value" id="kpi-dest" style="font-family: var(--font-sans); font-weight: 700;">—</span>
+        <span class="sub-value" id="kpi-dest-sub">Import Sink</span>
       </div>
     </section>
 
-    <!-- KPI Grid -->
-    <section class="kpi-container">
-      <div class="kpi-card">
-        <div class="kpi-title">Financial Valuation</div>
-        <div>
-          <div class="kpi-value" id="kpi-val-usd">$0.00</div>
-          <div class="kpi-desc">Total Trade Value (USD)</div>
+    <!-- Gráficos de Visualização Analítica -->
+    <section class="visualizations">
+      <!-- Rede Sankey -->
+      <div class="chart-block">
+        <div class="chart-header">
+          <h2 class="chart-title">Fig 1. Structural Bilateral Trade Flows</h2>
         </div>
+        <div id="chart-sankey" class="chart-wrapper"></div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Physical Volume</div>
-        <div>
-          <div class="kpi-value" id="kpi-val-kg">0.00</div>
-          <div class="kpi-desc">Net Weight (Metric Tons)</div>
+
+      <!-- Distribuição por Commodity -->
+      <div class="chart-block">
+        <div class="chart-header">
+          <h2 class="chart-title">Fig 2. Commodity Valuation Composition</h2>
         </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Dominant Origin Node</div>
-        <div>
-          <div class="kpi-value" id="kpi-val-origin">—</div>
-          <div class="kpi-desc">Largest Extractive Source</div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Primary Destination Hub</div>
-        <div>
-          <div class="kpi-value" id="kpi-val-dest">—</div>
-          <div class="kpi-desc">Largest Import Sink</div>
-        </div>
+        <div id="chart-bar" class="chart-wrapper bar-wrapper"></div>
       </div>
     </section>
 
-    <!-- Sankey Chart Section -->
-    <section class="chart-section">
-      <div class="chart-header">
-        <h2 class="chart-title">Structural Bilateral Flows</h2>
-        <p class="chart-subtitle">Nodes represent geopolitical actors. Link width indicates nominal trade valuation (USD), illustrating the metabolic transfer of wealth and resources.</p>
-      </div>
-      <div id="sankey_chart" class="sankey-wrapper"></div>
-    </section>
-
-    <!-- Bar Chart Section -->
-    <section class="chart-section">
-      <div class="chart-header">
-        <h2 class="chart-title">Commodity Composition</h2>
-        <p class="chart-subtitle">Distribution of total value across Harmonized System (HS) technological classifications.</p>
-      </div>
-      <div id="bar_chart" class="bar-wrapper"></div>
-    </section>
-
-    <!-- Beautiful Data Table -->
-    <section class="table-section">
-      <div class="table-toolbar">
+    <!-- Registo Empírico (Tabela) -->
+    <section class="data-table-section">
+      <div class="table-tools">
         <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.25rem;">Empirical Registry</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary);">Extracted and harmonized dataset from UN Comtrade.</p>
+          <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.5rem;">Empirical Data Registry</h2>
+          <div class="control-group search-box">
+            <input type="text" id="search-input" placeholder="Search specific actors or HS codes..." style="min-width: 300px;">
+          </div>
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-          <input type="text" class="search-input" id="search-input" placeholder="Search flows, codes, or actors...">
-          <button class="btn-export" id="btn-export">Export CSV</button>
-        </div>
+        <button id="btn-export" class="btn-export">Export to CSV</button>
       </div>
-      
-      <div class="table-responsive">
+
+      <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th onclick="sortTable('phase_id')">Phase ⇕</th>
-              <th onclick="sortTable('year')">Year ⇕</th>
-              <th onclick="sortTable('origin')">Origin Node ⇕</th>
-              <th onclick="sortTable('destination')">Destination Node ⇕</th>
-              <th onclick="sortTable('hs_code')">HS Code ⇕</th>
-              <th onclick="sortTable('hs_desc')">Commodity ⇕</th>
-              <th class="numeric" onclick="sortTable('value_usd')">Valuation (USD) ⇕</th>
-              <th class="numeric" onclick="sortTable('weight_kg')">Weight (KG) ⇕</th>
+              <th onclick="handleSort('phase_id')">Phase [⇅]</th>
+              <th onclick="handleSort('year')">Year [⇅]</th>
+              <th onclick="handleSort('origin')">Origin [⇅]</th>
+              <th onclick="handleSort('destination')">Destination [⇅]</th>
+              <th onclick="handleSort('hs_code')">HS Code [⇅]</th>
+              <th onclick="handleSort('hs_desc')">Commodity Description [⇅]</th>
+              <th class="col-num" onclick="handleSort('value_usd')">Value (USD) [⇅]</th>
+              <th class="col-num" onclick="handleSort('weight_kg')">Weight (KG) [⇅]</th>
             </tr>
           </thead>
-          <tbody id="table-body">
-            <!-- Rendered via JS -->
+          <tbody id="tbody-data">
+            <!-- Linhas geradas via JavaScript -->
           </tbody>
         </table>
       </div>
 
       <div class="table-footer">
-        <div class="pagination-info" id="page-info">Showing 0 of 0 records</div>
-        <div class="pagination-btns">
-          <button id="btn-prev" onclick="changePage(-1)">Previous</button>
-          <button id="btn-next" onclick="changePage(1)">Next</button>
+        <div class="pagination" id="pagination-info"><span>Showing 0 records</span></div>
+        <div class="pagination-buttons">
+          <button id="btn-prev" onclick="handlePagination(-1)">Previous</button>
+          <button id="btn-next" onclick="handlePagination(1)">Next</button>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>Research Methodology & Data Synthesis: Geopolitical Metabolism and Ecologically Unequal Exchange.</p>
-      <p style="margin-top: 0.5rem; opacity: 0.7;">Data Source: United Nations International Trade Statistics Database (UN Comtrade)</p>
-    </div>
-  </footer>
-
   <script>
-    // State Management
-    const STATE = {
-      raw: [], filtered: [],
-      filters: { phase: 'ALL', year: 'ALL', reporter: 'ALL', partner: 'ALL', commodity: 'ALL', search: '' },
-      sort: { field: 'value_usd', order: 'desc' },
-      pagination: { page: 1, pageSize: 15 },
-      chartsLoaded: false
+    // --------------------------------------------------------------------------
+    // Gestor de Estado Global da Aplicação
+    // --------------------------------------------------------------------------
+    const APP_STATE = {
+      dataset: [],
+      filtered: [],
+      filters: { phase: 'ALL', year: 'ALL', reporter: 'ALL', partner: 'ALL', commodity: 'ALL', query: '' },
+      sort: { column: 'value_usd', direction: 'desc' },
+      page: { current: 1, limit: 15 },
+      chartsReady: false
     };
 
-    // Google Charts Init
+    // --------------------------------------------------------------------------
+    // Inicialização do Google Charts e Sistema Base
+    // --------------------------------------------------------------------------
     google.charts.load('current', { 'packages': ['sankey', 'corechart'] });
     google.charts.setOnLoadCallback(() => {
-      STATE.chartsLoaded = true;
-      if (STATE.raw.length > 0) renderDashboard();
+      APP_STATE.chartsReady = true;
+      if (APP_STATE.dataset.length > 0) processAndRender();
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
-      initTheme();
-      await loadDatabase();
-      setupEventListeners();
+      setupTheme();
+      await fetchCoreData();
+      attachDOMEvents();
     });
 
-    async function loadDatabase() {
+    // --------------------------------------------------------------------------
+    // Motor de Dados (Fetch & Indexação)
+    // --------------------------------------------------------------------------
+    async function fetchCoreData() {
       try {
         const response = await fetch('database_complete.json');
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-        STATE.raw = await response.json();
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
-        document.getElementById('loading').style.display = 'none';
-        populateSelectDropdowns();
-        applyFilters();
-      } catch (error) {
-        console.error('Data Engine Error:', error);
-        document.getElementById('spinner-container').style.display = 'none';
-        document.getElementById('error-message').style.display = 'block';
+        const data = await response.json();
+        APP_STATE.dataset = data;
+        
+        document.getElementById('loader').style.display = 'none';
+        buildDropdowns();
+        executeFilters();
+      } catch (err) {
+        console.error('Data Engine Failure:', err);
+        document.getElementById('loader-content').style.display = 'none';
+        document.getElementById('error-panel').style.display = 'block';
       }
     }
 
-    function populateSelectDropdowns() {
-      const getUnique = (key) => [...new Set(STATE.raw.map(d => d[key]).filter(Boolean))].sort();
+    // --------------------------------------------------------------------------
+    // Construção Dinâmica dos Controlos (UI)
+    // --------------------------------------------------------------------------
+    function buildDropdowns() {
+      const getUnique = (key) => [...new Set(APP_STATE.dataset.map(row => row[key]).filter(Boolean))].sort();
       
-      const populate = (id, list) => {
-        const select = document.getElementById(id);
-        list.forEach(item => {
+      const injectOptions = (targetId, arr) => {
+        const selectEl = document.getElementById(targetId);
+        arr.forEach(val => {
           const opt = document.createElement('option');
-          opt.value = item;
-          opt.textContent = String(item).length > 55 ? String(item).substring(0, 55) + '...' : item;
-          select.appendChild(opt);
+          opt.value = val;
+          opt.textContent = String(val).length > 60 ? String(val).substring(0, 60) + '...' : val;
+          selectEl.appendChild(opt);
         });
       };
 
-      populate('filter-year', getUnique('year'));
-      populate('filter-reporter', getUnique('reporter'));
-      populate('filter-partner', getUnique('partner'));
-      populate('filter-commodity', getUnique('hs_desc'));
+      injectOptions('sel-year', getUnique('year'));
+      injectOptions('sel-reporter', getUnique('reporter'));
+      injectOptions('sel-partner', getUnique('partner'));
+      injectOptions('sel-commodity', getUnique('hs_desc'));
     }
 
-    function setupEventListeners() {
-      document.querySelectorAll('.segment-btn').forEach(btn => {
+    function attachDOMEvents() {
+      // Navegação por Fases
+      document.querySelectorAll('.tab-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
-          e.currentTarget.classList.add('active');
-          STATE.filters.phase = e.currentTarget.getAttribute('data-phase');
-          applyFilters();
+          document.querySelectorAll('.tab-item').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          APP_STATE.filters.phase = e.target.getAttribute('data-phase');
+          executeFilters();
         });
       });
 
-      ['year', 'reporter', 'partner', 'commodity'].forEach(field => {
-        document.getElementById(`filter-${field}`).addEventListener('change', (e) => {
-          STATE.filters[field] = e.target.value;
-          applyFilters();
+      // Selects
+      ['year', 'reporter', 'partner', 'commodity'].forEach(f => {
+        document.getElementById(`sel-${f}`).addEventListener('change', (e) => {
+          APP_STATE.filters[f] = e.target.value;
+          executeFilters();
         });
       });
 
+      // Caixa de Pesquisa e Exportação
       document.getElementById('search-input').addEventListener('input', (e) => {
-        STATE.filters.search = e.target.value.toLowerCase();
-        STATE.pagination.page = 1;
-        applyFilters();
+        APP_STATE.filters.query = e.target.value.toLowerCase();
+        APP_STATE.page.current = 1;
+        executeFilters();
       });
-      document.getElementById('btn-export').addEventListener('click', exportToCSV);
 
-      let resizeTimeout;
+      document.getElementById('btn-export').addEventListener('click', generateCSV);
+
+      // Redimensionamento de Gráficos Responsivo
+      let resizeTimer;
       window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-          if (STATE.chartsLoaded && STATE.filtered.length > 0) renderCharts();
-        }, 250);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (APP_STATE.chartsReady && APP_STATE.filtered.length > 0) renderVisualizations();
+        }, 200);
       });
     }
 
-    function applyFilters() {
-      STATE.filtered = STATE.raw.filter(row => {
-        if (STATE.filters.phase !== 'ALL' && row.phase_id !== STATE.filters.phase) return false;
-        if (STATE.filters.year !== 'ALL' && String(row.year) !== STATE.filters.year) return false;
-        if (STATE.filters.reporter !== 'ALL' && row.reporter !== STATE.filters.reporter) return false;
-        if (STATE.filters.partner !== 'ALL' && row.partner !== STATE.filters.partner) return false;
-        if (STATE.filters.commodity !== 'ALL' && row.hs_desc !== STATE.filters.commodity) return false;
+    // --------------------------------------------------------------------------
+    // Lógica de Filtragem e Ordenação
+    // --------------------------------------------------------------------------
+    function executeFilters() {
+      APP_STATE.filtered = APP_STATE.dataset.filter(row => {
+        const f = APP_STATE.filters;
+        if (f.phase !== 'ALL' && row.phase_id !== f.phase) return false;
+        if (f.year !== 'ALL' && String(row.year) !== f.year) return false;
+        if (f.reporter !== 'ALL' && row.reporter !== f.reporter) return false;
+        if (f.partner !== 'ALL' && row.partner !== f.partner) return false;
+        if (f.commodity !== 'ALL' && row.hs_desc !== f.commodity) return false;
         
-        if (STATE.filters.search) {
-          const s = STATE.filters.search;
-          const match = [row.origin, row.destination, row.hs_desc, row.hs_code, row.year].join(' ').toLowerCase();
-          if (!match.includes(s)) return false;
+        if (f.query) {
+          const dict = [row.origin, row.destination, row.hs_desc, row.hs_code].join(' ').toLowerCase();
+          if (!dict.includes(f.query)) return false;
         }
         return true;
       });
 
-      STATE.filtered.sort((a, b) => {
-        let valA = a[STATE.sort.field];
-        let valB = b[STATE.sort.field];
-        if (typeof valA === 'string') return STATE.sort.order === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-        return STATE.sort.order === 'asc' ? (valA || 0) - (valB || 0) : (valB || 0) - (valA || 0);
+      // Aplicação da Ordenação
+      APP_STATE.filtered.sort((a, b) => {
+        const valA = a[APP_STATE.sort.column];
+        const valB = b[APP_STATE.sort.column];
+        if (typeof valA === 'string') {
+          return APP_STATE.sort.direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        }
+        return APP_STATE.sort.direction === 'asc' ? (valA || 0) - (valB || 0) : (valB || 0) - (valA || 0);
       });
 
-      STATE.pagination.page = 1;
-      renderDashboard();
+      APP_STATE.page.current = 1;
+      processAndRender();
     }
 
-    function sortTable(field) {
-      STATE.sort.order = (STATE.sort.field === field && STATE.sort.order === 'desc') ? 'asc' : 'desc';
-      STATE.sort.field = field;
-      applyFilters();
+    function handleSort(col) {
+      if (APP_STATE.sort.column === col) {
+        APP_STATE.sort.direction = APP_STATE.sort.direction === 'desc' ? 'asc' : 'desc';
+      } else {
+        APP_STATE.sort.column = col;
+        APP_STATE.sort.direction = 'desc';
+      }
+      executeFilters();
     }
 
-    function changePage(delta) {
-      const maxPages = Math.ceil(STATE.filtered.length / STATE.pagination.pageSize);
-      STATE.pagination.page = Math.max(1, Math.min(maxPages, STATE.pagination.page + delta));
+    function handlePagination(step) {
+      const maxPages = Math.ceil(APP_STATE.filtered.length / APP_STATE.page.limit);
+      APP_STATE.page.current = Math.max(1, Math.min(maxPages, APP_STATE.page.current + step));
       renderTable();
     }
 
-    function renderDashboard() {
-      renderKPIs();
-      if (STATE.chartsLoaded) renderCharts();
+    // --------------------------------------------------------------------------
+    // Motores de Renderização
+    // --------------------------------------------------------------------------
+    function processAndRender() {
+      calculateKPIs();
+      if (APP_STATE.chartsReady) renderVisualizations();
       renderTable();
     }
 
-    function renderKPIs() {
-      let totalUSD = 0, totalKG = 0;
-      const originMap = {}, destMap = {};
+    function calculateKPIs() {
+      let tUSD = 0, tKG = 0;
+      const mapOrigin = {}, mapDest = {};
 
-      STATE.filtered.forEach(row => {
-        totalUSD += row.value_usd || 0;
-        totalKG += row.weight_kg || 0;
-        if (row.origin) originMap[row.origin] = (originMap[row.origin] || 0) + (row.value_usd || 0);
-        if (row.destination) destMap[row.destination] = (destMap[row.destination] || 0) + (row.value_usd || 0);
+      APP_STATE.filtered.forEach(r => {
+        tUSD += r.value_usd || 0;
+        tKG += r.weight_kg || 0;
+        if (r.origin) mapOrigin[r.origin] = (mapOrigin[r.origin] || 0) + (r.value_usd || 0);
+        if (r.destination) mapDest[r.destination] = (mapDest[r.destination] || 0) + (r.value_usd || 0);
       });
 
-      const fmtUSD = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
-      const fmtMT = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M MT` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})} MT`;
+      const formatCur = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
+      const formatWgt = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})}`;
 
-      const topOrigin = Object.entries(originMap).sort((a, b) => b[1] - a[1])[0];
-      const topDest = Object.entries(destMap).sort((a, b) => b[1] - a[1])[0];
+      const topOrig = Object.entries(mapOrigin).sort((a,b) => b[1]-a[1])[0];
+      const topDest = Object.entries(mapDest).sort((a,b) => b[1]-a[1])[0];
 
-      document.getElementById('kpi-val-usd').textContent = fmtUSD(totalUSD);
-      document.getElementById('kpi-val-kg').textContent = fmtMT(totalKG);
-      document.getElementById('kpi-val-origin').textContent = topOrigin ? topOrigin[0] : '—';
-      document.getElementById('kpi-val-dest').textContent = topDest ? topDest[0] : '—';
+      document.getElementById('kpi-val-usd').textContent = formatCur(tUSD);
+      document.getElementById('kpi-val-kg').textContent = formatWgt(tKG);
+      
+      document.getElementById('kpi-origin').textContent = topOrig ? topOrig[0] : '—';
+      document.getElementById('kpi-origin-sub').textContent = topOrig ? formatCur(topOrig[1]) : '';
+      
+      document.getElementById('kpi-dest').textContent = topDest ? topDest[0] : '—';
+      document.getElementById('kpi-dest-sub').textContent = topDest ? formatCur(topDest[1]) : '';
     }
 
-    function renderCharts() {
+    function renderVisualizations() {
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const textCol = isDark ? '#f9fafb' : '#111827';
-      const gridCol = isDark ? '#374151' : '#e5e7eb';
+      const colorText = isDark ? '#e6e6e6' : '#1a1a1a';
+      const colorLine = isDark ? '#333333' : '#e0dcd8';
+      const colorAccent = isDark ? '#ff8787' : '#8b0000';
 
-      const sankeyEl = document.getElementById('sankey_chart');
-      const barEl = document.getElementById('bar_chart');
+      const elSankey = document.getElementById('chart-sankey');
+      const elBar = document.getElementById('chart-bar');
 
-      if (STATE.filtered.length === 0) {
-        sankeyEl.innerHTML = '<p style="color:var(--text-tertiary); text-align:center; width:100%;">No data matches the current filters.</p>';
-        barEl.innerHTML = '';
+      if (APP_STATE.filtered.length === 0) {
+        elSankey.innerHTML = '<p style="text-align:center; padding:3rem; font-family:var(--font-mono);">No metabolic flows recorded for current parameters.</p>';
+        elBar.innerHTML = '';
         return;
       }
 
-      // Premium Sankey Colors
-      const academicColors = isDark 
-        ? ['#60a5fa', '#34d399', '#f472b6', '#fbbf24', '#a78bfa', '#9ca3af']
-        : ['#2563eb', '#059669', '#db2777', '#d97706', '#7c3aed', '#4b5563'];
-
-      const sankeyMap = {};
-      STATE.filtered.forEach(r => {
+      // --- Sankey ---
+      const flowMap = {};
+      APP_STATE.filtered.forEach(r => {
         if (!r.origin || !r.destination) return;
-        const key = `${r.origin} (Org)____${r.destination} (Dst)`;
-        sankeyMap[key] = (sankeyMap[key] || 0) + (r.value_usd || 0);
+        const hash = `${r.origin} (Org)____${r.destination} (Dst)`;
+        flowMap[hash] = (flowMap[hash] || 0) + (r.value_usd || 0);
       });
 
-      const sData = new google.visualization.DataTable();
-      sData.addColumn('string', 'Origin');
-      sData.addColumn('string', 'Destination');
-      sData.addColumn('number', 'Value (USD)');
-      Object.entries(sankeyMap).forEach(([k, v]) => sData.addRow([...k.split('____'), v]));
+      const dtSankey = new google.visualization.DataTable();
+      dtSankey.addColumn('string', 'Origin');
+      dtSankey.addColumn('string', 'Destination');
+      dtSankey.addColumn('number', 'Valuation');
+      Object.entries(flowMap).forEach(([k, v]) => dtSankey.addRow([...k.split('____'), v]));
 
-      const sChart = new google.visualization.Sankey(sankeyEl);
-      sChart.draw(sData, {
+      // Cores Académicas e Sóbrias para o Sankey
+      const colors = ['#1a1a1a', '#404040', '#737373', '#8b0000', '#2d4c7a', '#5c4e3a'];
+
+      new google.visualization.Sankey(elSankey).draw(dtSankey, {
         sankey: {
-          node: { label: { fontName: 'Inter', fontSize: 13, color: textCol, bold: true }, colors: academicColors, nodePadding: 30, width: 15 },
-          link: { colorMode: 'gradient', colors: academicColors }
+          node: { 
+            label: { fontName: 'IBM Plex Sans', fontSize: 13, color: colorText }, 
+            colors: isDark ? ['#e6e6e6', '#999', '#ff6b6b', '#4da6ff', '#f5b041'] : colors,
+            nodePadding: 25, width: 10 
+          },
+          link: { colorMode: 'gradient' }
         },
-        tooltip: { textStyle: { fontName: 'Inter', fontSize: 12 } }
+        tooltip: { textStyle: { fontName: 'IBM Plex Sans' } }
       });
 
-      // Bar Chart Logic
-      const cMap = {};
-      STATE.filtered.forEach(r => {
+      // --- Bar Chart ---
+      const commMap = {};
+      APP_STATE.filtered.forEach(r => {
         if (!r.hs_desc) return;
-        const label = r.hs_desc.length > 40 ? r.hs_desc.substring(0, 40) + '...' : r.hs_desc;
-        cMap[label] = (cMap[label] || 0) + (r.value_usd || 0);
+        const lbl = r.hs_desc.length > 45 ? r.hs_desc.substring(0, 45) + '...' : r.hs_desc;
+        commMap[lbl] = (commMap[lbl] || 0) + (r.value_usd || 0);
       });
 
-      const bData = new google.visualization.DataTable();
-      bData.addColumn('string', 'Commodity');
-      bData.addColumn('number', 'Valuation (USD)');
-      Object.entries(cMap).sort((a,b) => b[1] - a[1]).slice(0, 6).forEach(([k, v]) => bData.addRow([k, v]));
+      const dtBar = new google.visualization.DataTable();
+      dtBar.addColumn('string', 'Commodity');
+      dtBar.addColumn('number', 'Valuation');
+      Object.entries(commMap).sort((a,b) => b[1]-a[1]).slice(0,6).forEach(([k,v]) => dtBar.addRow([k,v]));
 
-      const bChart = new google.visualization.BarChart(barEl);
-      bChart.draw(bData, {
+      new google.visualization.BarChart(elBar).draw(dtBar, {
         backgroundColor: 'transparent',
         legend: { position: 'none' },
-        chartArea: { width: '65%', height: '80%' },
-        hAxis: { textStyle: { color: textCol, fontName:'Inter' }, gridlines: { color: gridCol } },
-        vAxis: { textStyle: { color: textCol, fontName:'Inter', fontSize: 12 } },
-        colors: [isDark ? '#3b82f6' : '#2563eb']
+        chartArea: { width: '60%', height: '80%' },
+        hAxis: { textStyle: { color: colorText, fontName: 'IBM Plex Mono' }, gridlines: { color: colorLine } },
+        vAxis: { textStyle: { color: colorText, fontName: 'IBM Plex Sans', fontSize: 11 } },
+        colors: [colorAccent]
       });
     }
 
     function renderTable() {
-      const tbody = document.getElementById('table-body');
-      tbody.innerHTML = '';
+      const tb = document.getElementById('tbody-data');
+      tb.innerHTML = '';
 
-      const start = (STATE.pagination.page - 1) * STATE.pagination.pageSize;
-      const end = start + STATE.pagination.pageSize;
-      const pageData = STATE.filtered.slice(start, end);
+      const idxStart = (APP_STATE.page.current - 1) * APP_STATE.page.limit;
+      const idxEnd = idxStart + APP_STATE.page.limit;
+      const chunk = APP_STATE.filtered.slice(idxStart, idxEnd);
 
-      if (pageData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 3rem; color: var(--text-tertiary);">No records found. Adjust your filters.</td></tr>';
-        document.getElementById('page-info').textContent = 'No records';
+      if (chunk.length === 0) {
+        tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">Dataset empty for applied constraints.</td></tr>';
+        document.getElementById('pagination-info').innerHTML = '<span>No records to display</span>';
         return;
       }
 
-      pageData.forEach(r => {
+      chunk.forEach(r => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="badge-phase">${(r.phase_id || '').toUpperCase()}</span></td>
-          <td style="font-weight: 500;">${r.year || '—'}</td>
-          <td>${r.origin || '—'}</td>
-          <td>${r.destination || '—'}</td>
-          <td style="font-family: var(--font-mono); color: var(--text-secondary);">${r.hs_code || '—'}</td>
-          <td title="${r.hs_desc || ''}">${r.hs_desc && r.hs_desc.length > 40 ? r.hs_desc.substring(0, 40) + '...' : (r.hs_desc || '—')}</td>
-          <td class="numeric" style="font-weight: 600;">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-          <td class="numeric" style="color: var(--text-secondary);">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})}</td>
+          <td style="font-family:var(--font-mono); font-size:0.75rem;">${(r.phase_id || '').toUpperCase()}</td>
+          <td>${r.year || '—'}</td>
+          <td style="font-weight:600;">${r.origin || '—'}</td>
+          <td style="font-weight:600;">${r.destination || '—'}</td>
+          <td style="font-family:var(--font-mono);">${r.hs_code || '—'}</td>
+          <td title="${r.hs_desc}">${r.hs_desc && r.hs_desc.length > 35 ? r.hs_desc.substring(0,35)+'...' : (r.hs_desc || '—')}</td>
+          <td class="col-num">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td class="col-num">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits:1, maximumFractionDigits:1})}</td>
         `;
-        tbody.appendChild(tr);
+        tb.appendChild(tr);
       });
 
-      const total = STATE.filtered.length;
-      document.getElementById('page-info').textContent = `Showing ${start + 1} to ${Math.min(end, total)} of ${total.toLocaleString()} entries`;
-      document.getElementById('btn-prev').disabled = STATE.pagination.page === 1;
-      document.getElementById('btn-next').disabled = end >= total;
+      const total = APP_STATE.filtered.length;
+      document.getElementById('pagination-info').innerHTML = `<span>Displaying records <strong>${idxStart + 1}—${Math.min(idxEnd, total)}</strong> of <strong>${total.toLocaleString()}</strong></span>`;
+      
+      document.getElementById('btn-prev').disabled = APP_STATE.page.current === 1;
+      document.getElementById('btn-next').disabled = idxEnd >= total;
     }
 
-    function exportToCSV() {
-      if (STATE.filtered.length === 0) return;
-      const headers = ['Phase_ID', 'Year', 'Origin', 'Destination', 'Flow', 'HS_Code', 'HS_Description', 'Value_USD', 'Weight_KG'];
-      const rows = STATE.filtered.map(r => [
-        r.phase_id, r.year, `"${r.origin}"`, `"${r.destination}"`, r.flow, `"${r.hs_code}"`, `"${(r.hs_desc || '').replace(/"/g, '""')}"`, r.value_usd, r.weight_kg
+    // --------------------------------------------------------------------------
+    // Funcionalidades de Exportação e Interface (Tema)
+    // --------------------------------------------------------------------------
+    function generateCSV() {
+      if (APP_STATE.filtered.length === 0) return;
+      const header = ['Phase', 'Year', 'Origin', 'Destination', 'Flow', 'HS_Code', 'Commodity', 'Value_USD', 'Weight_KG'];
+      const dataRows = APP_STATE.filtered.map(r => [
+        r.phase_id, r.year, `"${r.origin}"`, `"${r.destination}"`, r.flow, `"${r.hs_code}"`, `"${(r.hs_desc||'').replace(/"/g, '""')}"`, r.value_usd, r.weight_kg
       ]);
-      const csv = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const link = document.createElement('a');
-      link.setAttribute('href', encodeURI(csv));
-      link.setAttribute('download', `comtrade_research_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      const csvStr = 'data:text/csv;charset=utf-8,' + [header.join(','), ...dataRows.map(row => row.join(','))].join('\n');
+      
+      const a = document.createElement('a');
+      a.href = encodeURI(csvStr);
+      a.download = `Metabolism_Extract_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
-    function initTheme() {
-      const toggle = document.getElementById('theme-toggle');
-      const saved = localStorage.getItem('research_theme') || 'light';
+    function setupTheme() {
+      const btn = document.getElementById('theme-switcher');
+      const saved = localStorage.getItem('theme_editorial') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
-      updateBtnUI(saved);
-
-      toggle.addEventListener('click', () => {
-        const tgt = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', tgt);
-        localStorage.setItem('research_theme', tgt);
-        updateBtnUI(tgt);
-        if (STATE.chartsLoaded) renderCharts();
+      
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme_editorial', next);
+        if (APP_STATE.chartsReady) renderVisualizations();
       });
-
-      function updateBtnUI(t) {
-        document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
-        document.getElementById('theme-text').textContent = t === 'dark' ? 'Light Mode' : 'Dark Mode';
-      }
     }
   </script>
 </body>
