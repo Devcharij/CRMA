@@ -1,884 +1,1247 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geopolitical Metabolism | Interactive Research</title>
-  <meta name="description" content="Ecologically Unequal Exchange in global Critical Raw Material supply chains.">
-  
-  <!-- Carregamento do Apache ECharts (Substitui o Google Charts para permitir Zoom e maior fluidez) -->
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-  
-  <!-- Tipografia Moderna e Limpa (Google Fonts) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* --------------------------------------------------------------------------
-       Design System: Leve, Moderno e Espaçoso ("Clean UI")
-       -------------------------------------------------------------------------- */
-    :root {
-      /* Tema Claro */
-      --bg-body: #f8fafc;
-      --bg-surface: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --accent-color: #3b82f6;
-      --accent-hover: #2563eb;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      
-      --font-family: 'Inter', system-ui, sans-serif;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-    }
-
-    [data-theme="dark"] {
-      /* Tema Escuro (Tons suaves de azul ardósia, não agressivos) */
-      --bg-body: #0f172a;
-      --bg-surface: #1e293b;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
-      --accent-color: #60a5fa;
-      --accent-hover: #93c5fd;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Reset Global */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background-color: var(--bg-body);
-      color: var(--text-main);
-      font-family: var(--font-family);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .container {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    /* --------------------------------------------------------------------------
-       Cabeçalho (Header)
-       -------------------------------------------------------------------------- */
-    header {
-      padding: 2.5rem 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-
-    .header-text h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.25rem;
-    }
-
-    .header-text p {
-      color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 700px;
-    }
-
-    .theme-btn {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.6rem 1.2rem;
-      border-radius: 99px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s;
-    }
-
-    .theme-btn:hover {
-      border-color: var(--accent-color);
-      color: var(--accent-color);
-    }
-
-    /* --------------------------------------------------------------------------
-       Barra de Filtros Leve
-       -------------------------------------------------------------------------- */
-    .filters-card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 2rem;
-      border: 1px solid var(--border-color);
-    }
-
-    .phase-selector {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1.5rem;
-    }
-
-    .phase-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-muted);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .phase-btn:hover { background: var(--bg-body); color: var(--text-main); }
-    .phase-btn.active {
-      background: var(--accent-color);
-      color: #ffffff;
-    }
-
-    .dropdowns-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .dropdown-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .dropdown-group label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-
-    select, input[type="text"] {
-      background-color: var(--bg-body);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-family: var(--font-family);
-      font-size: 0.9rem;
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geopolitical Metabolism & Ecologically Unequal Exchange</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     
-    select:focus, input[type="text"]:focus {
-      border-color: var(--accent-color);
-    }
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --bg-input: #f1f5f9;
+            --bg-hover: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-light: rgba(59, 130, 246, 0.1);
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 9999px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    /* --------------------------------------------------------------------------
-       Cartões de KPIs (Métricas)
-       -------------------------------------------------------------------------- */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
+        [data-theme="dark"] {
+            /* Dark Theme Variables */
+            --bg-page: #0f172a;
+            --bg-card: #1e293b;
+            --bg-glass: rgba(30, 41, 59, 0.85);
+            --bg-input: #334155;
+            --bg-hover: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --accent-light: rgba(96, 165, 250, 0.15);
+            --border: #334155;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5);
+        }
 
-    .kpi-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    .kpi-card h3 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            line-height: 1.5;
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .kpi-value {
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--text-main);
-    }
+        /* Container Layout */
+        .dashboard-container {
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
 
-    .kpi-sub {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
 
-    /* --------------------------------------------------------------------------
-       Área dos Gráficos ECharts
-       -------------------------------------------------------------------------- */
-    .chart-section {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-md);
-    }
+        .header-titles h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: var(--text-primary);
+        }
 
-    .chart-header {
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
+        .header-titles p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            max-width: 800px;
+        }
 
-    .chart-header h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-    }
+        /* Theme Toggle & Controls */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
-    .zoom-hint {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      background: var(--bg-body);
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-    }
+        .btn-icon {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
 
-    .echarts-container {
-      width: 100%;
-      height: 600px; /* Altura generosa para o Sankey */
-    }
+        .btn-icon:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
 
-    .bar-container {
-      height: 400px;
-    }
+        /* Notice Banner */
+        .notice-banner {
+            background: var(--accent-light);
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-sm);
+            display: none; /* Toggled via JS */
+        }
 
-    /* --------------------------------------------------------------------------
-       Tabela de Dados Limpa
-       -------------------------------------------------------------------------- */
-    .table-section {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 4rem;
-    }
+        .notice-banner.active {
+            display: flex;
+        }
 
-    .table-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
 
-    .btn-export {
-      background: var(--accent-color);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-export:hover { background: var(--accent-hover); }
+        .btn-upload {
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--bg-card);
+            padding: 0.4rem 0.875rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-    .table-wrapper {
-      overflow-x: auto;
-    }
+        .btn-upload:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
 
-    th {
-      background: var(--bg-body);
-      padding: 1rem;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-color);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    th:hover { color: var(--accent-color); }
+        /* Sticky Filter Panel */
+        .filter-panel {
+            position: sticky;
+            top: 1rem;
+            z-index: 100;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-    td {
-      padding: 1rem;
-      font-size: 0.85rem;
-      border-bottom: 1px solid var(--border-color);
-      white-space: nowrap;
-    }
+        /* iOS/macOS Segmented Control */
+        .segmented-control {
+            display: flex;
+            background: var(--bg-input);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            position: relative;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
 
-    tr:hover td { background-color: var(--bg-body); }
-    tr:last-child td { border-bottom: none; }
+        .segmented-control::-webkit-scrollbar {
+            display: none;
+        }
 
-    .col-num { font-variant-numeric: tabular-nums; text-align: right; }
+        .segment-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            white-space: nowrap;
+            z-index: 2;
+        }
 
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border-color);
-    }
+        .segment-btn:hover {
+            color: var(--text-primary);
+        }
 
-    .page-info { font-size: 0.85rem; color: var(--text-muted); }
+        .segment-btn.active {
+            color: var(--accent);
+            font-weight: 600;
+            background: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+        }
 
-    .page-btns button {
-      background: var(--bg-body);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-    }
-    .page-btns button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .page-btns button:not(:disabled):hover { border-color: var(--accent-color); }
+        /* Dropdown Selectors Grid */
+        .filter-dropdowns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
 
-    /* --------------------------------------------------------------------------
-       Ecrã de Loading e Erros
-       -------------------------------------------------------------------------- */
-    #loader {
-      position: fixed; inset: 0; background: var(--bg-body);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999;
-    }
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
 
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid var(--border-color); border-top-color: var(--accent-color);
-      border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+        .select-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-left: 0.25rem;
+        }
 
-    .error-msg {
-      background: var(--bg-surface); border: 1px solid #ef4444; padding: 2rem;
-      border-radius: var(--radius-lg); text-align: center; display: none; max-width: 500px;
-    }
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
 
-    @media (max-width: 768px) {
-      .header-text h1 { font-size: 1.5rem; }
-      .dropdowns-grid { grid-template-columns: 1fr; }
-      .chart-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-    }
-  </style>
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.625rem 2rem 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .custom-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .custom-select-icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-muted);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* KPI Cards Section */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1200px) {
+            .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .kpi-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .kpi-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Visualization Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 480px;
+            position: relative;
+        }
+
+        /* Data Table Section */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-p1 { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+        .badge-p2 { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
+        .badge-p3a { background: rgba(16, 185, 129, 0.15); color: #059669; }
+        .badge-p3b { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-page {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .btn-page:hover:not(:disabled) {
+            background: var(--bg-hover);
+        }
+
+        .btn-page:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 1.5rem 0 0.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Loading Overlay -->
-  <div id="loader">
-    <div id="loader-content" style="text-align: center;">
-      <div class="spinner" style="margin: 0 auto 1rem;"></div>
-      <h2 style="font-size: 1.2rem; font-weight: 600;">Initializing Data Engine</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Loading Comtrade Database...</p>
-    </div>
-    <div id="error-panel" class="error-msg">
-      <h3 style="color: #ef4444; margin-bottom: 0.5rem;">Connection Error</h3>
-      <p style="color: var(--text-muted); margin-bottom: 1rem;">Could not load <code>database_complete.json</code>. Ensure you are using a web server or GitHub Pages.</p>
-      <button onclick="location.reload()" class="btn-export">Retry</button>
-    </div>
-  </div>
-
-  <div class="container">
-    <header>
-      <div class="header-text">
-        <h1>Geopolitical Metabolism & Ecologically Unequal Exchange</h1>
-        <p>Interactive mapping of Critical Raw Material flows driving the global energy transition.</p>
-      </div>
-      <button id="theme-switcher" class="theme-btn">🌙 Dark Mode</button>
+<div class="dashboard-container">
+    <header class="header">
+        <div class="header-titles">
+            <h1>Geopolitical Metabolism & Ecologically Unequal Exchange</h1>
+            <p>Structural Hierarchy of Critical Raw Material (CRM) Flows Driving the European Green Deal (2018–2023)</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon" id="themeToggle" title="Toggle Light/Dark Mode" aria-label="Toggle Theme">
+                <svg id="sunIcon" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
     </header>
 
-    <!-- Filtros Leves e Flutuantes -->
-    <section class="filters-card">
-      <div class="phase-selector" id="phase-container">
-        <button class="phase-btn active" data-phase="ALL">Global Synthesis</button>
-        <button class="phase-btn" data-phase="p1">Phase 1: Raw Extraction</button>
-        <button class="phase-btn" data-phase="p2">Phase 2: Refined Funnel</button>
-        <button class="phase-btn" data-phase="p3a">Phase 3A: Tech (Batteries)</button>
-        <button class="phase-btn" data-phase="p3b">Phase 3B: Tech (EVs)</button>
-      </div>
+    <div class="notice-banner" id="noticeBanner">
+        <div>
+            <strong>Notice:</strong> <span id="noticeText">Could not load database_complete.json via HTTP (likely opened via file:// or CORS). Loaded representative CRM research dataset automatically.</span>
+        </div>
+        <div class="upload-btn-wrapper">
+            <button class="btn-upload">Load Local JSON File</button>
+            <input type="file" id="jsonFileInput" accept=".json">
+        </div>
+    </div>
 
-      <div class="dropdowns-grid">
-        <div class="dropdown-group">
-          <label>Observation Year</label>
-          <select id="sel-year"><option value="ALL">All Years</option></select>
+    <section class="filter-panel">
+        <div class="segmented-control" role="group" aria-label="Phase Selection">
+            <button class="segment-btn active" data-phase="all">Global Synthesis (ALL)</button>
+            <button class="segment-btn" data-phase="p1">Phase 1: Raw Extraction (p1)</button>
+            <button class="segment-btn" data-phase="p2">Phase 2: Refined Funnel (p2)</button>
+            <button class="segment-btn" data-phase="p3a">Phase 3A: Tech Batteries (p3a)</button>
+            <button class="segment-btn" data-phase="p3b">Phase 3B: Tech EVs (p3b)</button>
         </div>
-        <div class="dropdown-group">
-          <label>Origin Reporter</label>
-          <select id="sel-reporter"><option value="ALL">All Reporters</option></select>
+
+        <div class="filter-dropdowns">
+            <div class="select-group">
+                <label class="select-label" for="yearSelect">Year</label>
+                <div class="custom-select-wrapper">
+                    <select class="custom-select" id="yearSelect">
+                        <option value="all">All Years (2018–2023)</option>
+                    </select>
+                    <svg class="custom-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+
+            <div class="select-group">
+                <label class="select-label" for="originSelect">Origin Reporter</label>
+                <div class="custom-select-wrapper">
+                    <select class="custom-select" id="originSelect">
+                        <option value="all">All Origins</option>
+                    </select>
+                    <svg class="custom-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+
+            <div class="select-group">
+                <label class="select-label" for="destinationSelect">Destination Partner</label>
+                <div class="custom-select-wrapper">
+                    <select class="custom-select" id="destinationSelect">
+                        <option value="all">All Destinations</option>
+                    </select>
+                    <svg class="custom-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+
+            <div class="select-group">
+                <label class="select-label" for="commoditySelect">Commodity (HS Code)</label>
+                <div class="custom-select-wrapper">
+                    <select class="custom-select" id="commoditySelect">
+                        <option value="all">All Commodities</option>
+                    </select>
+                    <svg class="custom-select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
         </div>
-        <div class="dropdown-group">
-          <label>Destination Partner</label>
-          <select id="sel-partner"><option value="ALL">All Partners</option></select>
-        </div>
-        <div class="dropdown-group">
-          <label>Commodity Classification</label>
-          <select id="sel-commodity"><option value="ALL">All Commodities</option></select>
-        </div>
-      </div>
     </section>
 
-    <!-- KPIs -->
     <section class="kpi-grid">
-      <div class="kpi-card">
-        <h3>Total Trade Valuation</h3>
-        <div class="kpi-value" id="kpi-val-usd">$0.00</div>
-        <div class="kpi-sub">Nominal Value (USD)</div>
-      </div>
-      <div class="kpi-card">
-        <h3>Physical Volume Executed</h3>
-        <div class="kpi-value" id="kpi-val-kg">0.00</div>
-        <div class="kpi-sub">Metric Tons (MT)</div>
-      </div>
-      <div class="kpi-card">
-        <h3>Primary Origin Hub</h3>
-        <div class="kpi-value" id="kpi-origin">—</div>
-        <div class="kpi-sub" id="kpi-origin-sub">Extractive Source</div>
-      </div>
-      <div class="kpi-card">
-        <h3>Primary Destination Sink</h3>
-        <div class="kpi-value" id="kpi-dest">—</div>
-        <div class="kpi-sub" id="kpi-dest-sub">Import Hub</div>
-      </div>
-    </section>
-
-    <!-- Gráfico Sankey (ECharts) com Zoom -->
-    <section class="chart-section">
-      <div class="chart-header">
-        <h2>Structural Bilateral Trade Network</h2>
-        <span class="zoom-hint">🖱️ Scroll to Zoom | Drag to Pan</span>
-      </div>
-      <div id="echart-sankey" class="echarts-container"></div>
-    </section>
-
-    <!-- Gráfico de Barras (ECharts) -->
-    <section class="chart-section">
-      <div class="chart-header">
-        <h2>Commodity Valuation Distribution</h2>
-      </div>
-      <div id="echart-bar" class="bar-container"></div>
-    </section>
-
-    <!-- Tabela -->
-    <section class="table-section">
-      <div class="table-controls">
-        <input type="text" id="search-input" placeholder="Search flows or HS codes..." style="min-width: 280px;">
-        <button id="btn-export" class="btn-export">Export to CSV</button>
-      </div>
-
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th onclick="handleSort('phase_id')">Phase ⇕</th>
-              <th onclick="handleSort('year')">Year ⇕</th>
-              <th onclick="handleSort('origin')">Origin Node ⇕</th>
-              <th onclick="handleSort('destination')">Destination Node ⇕</th>
-              <th onclick="handleSort('hs_code')">HS Code ⇕</th>
-              <th onclick="handleSort('hs_desc')">Commodity ⇕</th>
-              <th class="col-num" onclick="handleSort('value_usd')">Value (USD) ⇕</th>
-              <th class="col-num" onclick="handleSort('weight_kg')">Weight (KG) ⇕</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-data"></tbody>
-        </table>
-      </div>
-
-      <div class="pagination">
-        <div class="page-info" id="pagination-info">Showing 0 records</div>
-        <div class="page-btns">
-          <button id="btn-prev" onclick="handlePagination(-1)">Previous</button>
-          <button id="btn-next" onclick="handlePagination(1)">Next</button>
+        <div class="kpi-card">
+            <div class="kpi-title">
+                <span>Total Trade Valuation</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="kpi-value" id="kpiValueUsd">$0.00M</div>
+            <div class="kpi-subtitle">Cumulative monetary flow (USD)</div>
         </div>
-      </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">
+                <span>Physical Volume Executed</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            </div>
+            <div class="kpi-value" id="kpiWeight">0.00 MT</div>
+            <div class="kpi-subtitle">Net ecological extraction (Metric Tons)</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">
+                <span>Primary Origin Hub</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"></circle><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path></svg>
+            </div>
+            <div class="kpi-value" id="kpiOrigin" style="font-size: 1.4rem;">N/A</div>
+            <div class="kpi-subtitle">Highest valuation exporter</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">
+                <span>Primary Destination Sink</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+            </div>
+            <div class="kpi-value" id="kpiDestination" style="font-size: 1.4rem;">N/A</div>
+            <div class="kpi-subtitle">Highest valuation importer</div>
+        </div>
     </section>
-  </div>
 
-  <script>
-    // --------------------------------------------------------------------------
-    // Gestor de Estado da Aplicação
-    // --------------------------------------------------------------------------
-    const APP_STATE = {
-      dataset: [],
-      filtered: [],
-      filters: { phase: 'ALL', year: 'ALL', reporter: 'ALL', partner: 'ALL', commodity: 'ALL', query: '' },
-      sort: { column: 'value_usd', direction: 'desc' },
-      page: { current: 1, limit: 15 }
-    };
+    <section class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">Structural Trade Flow Hierarchy</h2>
+                    <p class="chart-subtitle">Origin → Destination CRM metabolism (Zoom & Pan enabled)</p>
+                </div>
+            </div>
+            <div class="chart-container" id="sankeyChart"></div>
+        </div>
 
-    // Instâncias do ECharts
-    let sankeyChartInstance = null;
-    let barChartInstance = null;
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <h2 class="chart-title">Top Commodities by Valuation</h2>
+                    <p class="chart-subtitle">Dominant critical raw materials (USD)</p>
+                </div>
+            </div>
+            <div class="chart-container" id="barChart"></div>
+        </div>
+    </section>
 
-    // Inicialização da página
-    document.addEventListener('DOMContentLoaded', async () => {
-      setupTheme();
-      initECharts();
-      await fetchCoreData();
-      attachDOMEvents();
+    <section class="table-card">
+        <div class="chart-header">
+            <div>
+                <h2 class="chart-title">Metabolic Flow Ledger</h2>
+                <p class="chart-subtitle" id="tableSubtitle">Showing 0 records</p>
+            </div>
+            <div class="pagination-btns">
+                <button class="btn-page" id="prevPageBtn" disabled>Previous</button>
+                <button class="btn-page" id="nextPageBtn" disabled>Next</button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Year</th>
+                        <th>Origin</th>
+                        <th>Destination</th>
+                        <th>HS Code & Commodity Description</th>
+                        <th>Flow</th>
+                        <th>Value (USD)</th>
+                        <th>Weight (MT)</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <span id="pageInfo">Page 1 of 1</span>
+            <span>Sorted by highest USD valuation</span>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Geopolitical Metabolism & Ecologically Unequal Exchange Research Dashboard &bull; Powered by Apache ECharts & Vanilla JS &bull; Designed for GitHub Pages</p>
+    </footer>
+</div>
+
+<script>
+/**
+ * Core Application Logic
+ * Built for resilience, high performance, and strict architectural standards.
+ */
+
+// Global State
+let rawData = [];
+let filteredData = [];
+let currentPage = 1;
+const rowsPerPage = 15;
+let activePhase = 'all';
+
+// ECharts Instances
+let sankeyInstance = null;
+let barInstance = null;
+
+// Built-in Representative Sample Dataset (Fallback for file:// or offline GitHub Pages demo)
+const SAMPLE_DATASET = [
+    // Phase 1: Raw Extraction
+    { phase_id: "p1", year: 2018, reporter: "Chile", partner: "Germany", origin: "Chile", destination: "Germany", flow: "Export", hs_code: "260300", hs_desc: "Copper ores and concentrates", value_usd: 450210000, weight_kg: 215000000 },
+    { phase_id: "p1", year: 2018, reporter: "Argentina", partner: "France", origin: "Argentina", destination: "France", flow: "Export", hs_code: "282520", hs_desc: "Lithium oxide and hydroxide", value_usd: 85400000, weight_kg: 12400000 },
+    { phase_id: "p1", year: 2019, reporter: "Brazil", partner: "Spain", origin: "Brazil", destination: "Spain", flow: "Export", hs_code: "250410", hs_desc: "Natural graphite in powder or flakes", value_usd: 64200000, weight_kg: 45000000 },
+    { phase_id: "p1", year: 2020, reporter: "Chile", partner: "Belgium", origin: "Chile", destination: "Belgium", flow: "Export", hs_code: "260300", hs_desc: "Copper ores and concentrates", value_usd: 310500000, weight_kg: 142000000 },
+    { phase_id: "p1", year: 2021, reporter: "Brazil", partner: "Germany", origin: "Brazil", destination: "Germany", flow: "Export", hs_code: "260400", hs_desc: "Nickel ores and concentrates", value_usd: 120800000, weight_kg: 32000000 },
+    { phase_id: "p1", year: 2022, reporter: "Chile", partner: "EU-27", origin: "Chile", destination: "EU-27", flow: "Export", hs_code: "260200", hs_desc: "Manganiferous iron ores", value_usd: 95000000, weight_kg: 88000000 },
+    { phase_id: "p1", year: 2023, reporter: "Argentina", partner: "Germany", origin: "Argentina", destination: "Germany", flow: "Export", hs_code: "282520", hs_desc: "Lithium oxide and hydroxide", value_usd: 210400000, weight_kg: 28500000 },
+    
+    // Phase 2: Refined Funnel (Lithium Carbonate extraction)
+    { phase_id: "p2", year: 2018, reporter: "Chile", partner: "Belgium", origin: "Chile", destination: "Belgium", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 137612996, weight_kg: 9115200 },
+    { phase_id: "p2", year: 2018, reporter: "Chile", partner: "Germany", origin: "Chile", destination: "Germany", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 98450000, weight_kg: 6540000 },
+    { phase_id: "p2", year: 2019, reporter: "Argentina", partner: "France", origin: "Argentina", destination: "France", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 75200000, weight_kg: 5100000 },
+    { phase_id: "p2", year: 2020, reporter: "Chile", partner: "Germany", origin: "Chile", destination: "Germany", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 115000000, weight_kg: 7800000 },
+    { phase_id: "p2", year: 2021, reporter: "Argentina", partner: "EU-27", origin: "Argentina", destination: "EU-27", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 189000000, weight_kg: 11200000 },
+    { phase_id: "p2", year: 2022, reporter: "Chile", partner: "France", origin: "Chile", destination: "France", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 340500000, weight_kg: 14500000 },
+    { phase_id: "p2", year: 2023, reporter: "Brazil", partner: "Poland", origin: "Brazil", destination: "Poland", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 64800, weight_kg: 100 },
+    { phase_id: "p2", year: 2023, reporter: "Chile", partner: "Germany", origin: "Chile", destination: "Germany", flow: "Export", hs_code: "283691", hs_desc: "Carbonates; lithium carbonate", value_usd: 480200000, weight_kg: 18900000 },
+
+    // Phase 3A: Tech Batteries (Importing manufactured technology)
+    { phase_id: "p3a", year: 2018, reporter: "Argentina", partner: "Austria", origin: "Austria", destination: "Argentina", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 5097, weight_kg: 15 },
+    { phase_id: "p3a", year: 2018, reporter: "Brazil", partner: "Czechia", origin: "Czechia", destination: "Brazil", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 6311, weight_kg: 60 },
+    { phase_id: "p3a", year: 2019, reporter: "Chile", partner: "Germany", origin: "Germany", destination: "Chile", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 14500000, weight_kg: 450000 },
+    { phase_id: "p3a", year: 2020, reporter: "Argentina", partner: "World", origin: "World", destination: "Argentina", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 49532937, weight_kg: 811113 },
+    { phase_id: "p3a", year: 2021, reporter: "Brazil", partner: "Germany", origin: "Germany", destination: "Brazil", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 85400000, weight_kg: 1850000 },
+    { phase_id: "p3a", year: 2022, reporter: "Chile", partner: "Spain", origin: "Spain", destination: "Chile", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 32100000, weight_kg: 920000 },
+    { phase_id: "p3a", year: 2023, reporter: "Argentina", partner: "Germany", origin: "Germany", destination: "Argentina", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 1521903, weight_kg: 7594 },
+    { phase_id: "p3a", year: 2023, reporter: "Uruguay", partner: "Spain", origin: "Spain", destination: "Uruguay", flow: "Import", hs_code: "850760", hs_desc: "Lithium-ion electric accumulators", value_usd: 17985, weight_kg: 373 },
+
+    // Phase 3B: Tech EVs (Importing electric vehicles)
+    { phase_id: "p3b", year: 2018, reporter: "Argentina", partner: "France", origin: "France", destination: "Argentina", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 21918, weight_kg: 1635 },
+    { phase_id: "p3b", year: 2018, reporter: "Brazil", partner: "France", origin: "France", destination: "Brazil", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 248708, weight_kg: 9798 },
+    { phase_id: "p3b", year: 2018, reporter: "Chile", partner: "Germany", origin: "Germany", destination: "Chile", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 950202, weight_kg: 48149 },
+    { phase_id: "p3b", year: 2019, reporter: "Colombia", partner: "France", origin: "France", destination: "Colombia", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 3796519, weight_kg: 255678 },
+    { phase_id: "p3b", year: 2020, reporter: "Brazil", partner: "Spain", origin: "Spain", destination: "Brazil", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 4500000, weight_kg: 180000 },
+    { phase_id: "p3b", year: 2021, reporter: "Chile", partner: "Belgium", origin: "Belgium", destination: "Chile", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 12400000, weight_kg: 620000 },
+    { phase_id: "p3b", year: 2022, reporter: "Argentina", partner: "Germany", origin: "Germany", destination: "Argentina", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 28500000, weight_kg: 1100000 },
+    { phase_id: "p3b", year: 2023, reporter: "Chile", partner: "Spain", origin: "Spain", destination: "Chile", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 946916, weight_kg: 48477 },
+    { phase_id: "p3b", year: 2023, reporter: "Uruguay", partner: "Germany", origin: "Germany", destination: "Uruguay", flow: "Import", hs_code: "870380", hs_desc: "Vehicles; with only electric motor for propulsion", value_usd: 9595671, weight_kg: 331211 }
+];
+
+// Initialize Application
+document.addEventListener('DOMContentLoaded', () => {
+    initThemeToggle();
+    initEventListeners();
+    initECharts();
+    loadData();
+});
+
+/**
+ * 1. Theme Toggle Management
+ */
+function initThemeToggle() {
+    const toggleBtn = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    
+    // Check saved or system preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
     });
 
-    // --------------------------------------------------------------------------
-    // Inicialização dos Gráficos ECharts
-    // --------------------------------------------------------------------------
-    function initECharts() {
-      // Cria as instâncias nas divs correspondentes
-      sankeyChartInstance = echarts.init(document.getElementById('echart-sankey'));
-      barChartInstance = echarts.init(document.getElementById('echart-bar'));
-
-      // Listener para tornar os gráficos responsivos (redimensionamento automático)
-      window.addEventListener('resize', () => {
-        if (sankeyChartInstance) sankeyChartInstance.resize();
-        if (barChartInstance) barChartInstance.resize();
-      });
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        if (theme === 'dark') {
+            sunIcon.style.display = 'inline-block';
+            moonIcon.style.display = 'none';
+        } else {
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'inline-block';
+        }
+        // Update charts theme coloration
+        updateChartThemes();
     }
+}
 
-    // --------------------------------------------------------------------------
-    // Motor de Dados
-    // --------------------------------------------------------------------------
-    async function fetchCoreData() {
-      try {
+/**
+ * 2. Data Loading & Fallback Engine
+ */
+async function loadData() {
+    try {
         const response = await fetch('database_complete.json');
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        
-        APP_STATE.dataset = await response.json();
-        
-        document.getElementById('loader').style.display = 'none';
-        buildDropdowns();
-        executeFilters();
-      } catch (err) {
-        console.error('Data Load Error:', err);
-        document.getElementById('loader-content').style.display = 'none';
-        document.getElementById('error-panel').style.display = 'block';
-      }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        rawData = data;
+        document.getElementById('noticeBanner').classList.remove('active');
+    } catch (error) {
+        console.warn("Could not load database_complete.json. Initializing Fallback Dataset:", error);
+        rawData = SAMPLE_DATASET;
+        document.getElementById('noticeBanner').classList.add('active');
     }
+    
+    populateDropdowns();
+    applyFilters();
+}
 
-    function buildDropdowns() {
-      const getUnique = (key) => [...new Set(APP_STATE.dataset.map(r => r[key]).filter(Boolean))].sort();
-      
-      const injectOptions = (targetId, arr) => {
-        const selectEl = document.getElementById(targetId);
-        arr.forEach(val => {
-          const opt = document.createElement('option');
-          opt.value = val;
-          opt.textContent = String(val).length > 50 ? String(val).substring(0, 50) + '...' : val;
-          selectEl.appendChild(opt);
-        });
-      };
+// Local File Upload Handler for offline GitHub Pages testing
+document.getElementById('jsonFileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const uploadedData = JSON.parse(event.target.result);
+            if (Array.isArray(uploadedData) && uploadedData.length > 0) {
+                rawData = uploadedData;
+                document.getElementById('noticeBanner').classList.remove('active');
+                populateDropdowns();
+                applyFilters();
+            } else {
+                alert("Invalid JSON format. Expected an array of trade objects.");
+            }
+        } catch (err) {
+            alert("Error parsing JSON file: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+});
 
-      injectOptions('sel-year', getUnique('year'));
-      injectOptions('sel-reporter', getUnique('reporter'));
-      injectOptions('sel-partner', getUnique('partner'));
-      injectOptions('sel-commodity', getUnique('hs_desc'));
-    }
-
-    function attachDOMEvents() {
-      document.querySelectorAll('.phase-btn').forEach(btn => {
+/**
+ * 3. Filter Controls & UI Event Listeners
+ */
+function initEventListeners() {
+    // Segmented Phase Control
+    const segmentBtns = document.querySelectorAll('.segment-btn');
+    segmentBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
-          APP_STATE.filters.phase = e.target.getAttribute('data-phase');
-          executeFilters();
+            segmentBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            activePhase = e.target.getAttribute('data-phase');
+            applyFilters();
         });
-      });
+    });
 
-      ['year', 'reporter', 'partner', 'commodity'].forEach(f => {
-        document.getElementById(`sel-${f}`).addEventListener('change', (e) => {
-          APP_STATE.filters[f] = e.target.value;
-          executeFilters();
+    // Dropdowns
+    ['yearSelect', 'originSelect', 'destinationSelect', 'commoditySelect'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+            currentPage = 1;
+            applyFilters();
         });
-      });
+    });
 
-      document.getElementById('search-input').addEventListener('input', (e) => {
-        APP_STATE.filters.query = e.target.value.toLowerCase();
-        APP_STATE.page.current = 1;
-        executeFilters();
-      });
+    // Pagination
+    document.getElementById('prevPageBtn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+        }
+    });
 
-      document.getElementById('btn-export').addEventListener('click', generateCSV);
+    document.getElementById('nextPageBtn').addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTable();
+        }
+    });
+
+    // Window Resize for ECharts
+    window.addEventListener('resize', () => {
+        if (sankeyInstance) sankeyInstance.resize();
+        if (barInstance) barInstance.resize();
+    });
+}
+
+function populateDropdowns() {
+    const years = [...new Set(rawData.map(d => d.year))].sort((a,b) => b - a);
+    const origins = [...new Set(rawData.map(d => d.origin))].sort();
+    const destinations = [...new Set(rawData.map(d => d.destination))].sort();
+    const commodities = [...new Set(rawData.map(d => d.hs_desc))].sort();
+
+    fillSelect('yearSelect', years, "All Years");
+    fillSelect('originSelect', origins, "All Origins");
+    fillSelect('destinationSelect', destinations, "All Destinations");
+    fillSelect('commoditySelect', commodities, "All Commodities");
+}
+
+function fillSelect(elementId, items, defaultText) {
+    const select = document.getElementById(elementId);
+    const currentVal = select.value;
+    select.innerHTML = `<option value="all">${defaultText}</option>`;
+    items.forEach(item => {
+        if (item) {
+            const opt = document.createElement('option');
+            opt.value = item;
+            opt.textContent = item;
+            select.appendChild(opt);
+        }
+    });
+    // Preserve selection if it exists in new data
+    if (items.includes(currentVal) || (typeof items[0] === 'number' && items.includes(Number(currentVal)))) {
+        select.value = currentVal;
+    }
+}
+
+function applyFilters() {
+    const yearVal = document.getElementById('yearSelect').value;
+    const originVal = document.getElementById('originSelect').value;
+    const destVal = document.getElementById('destinationSelect').value;
+    const commVal = document.getElementById('commoditySelect').value;
+
+    filteredData = rawData.filter(d => {
+        const matchPhase = activePhase === 'all' || d.phase_id === activePhase;
+        const matchYear = yearVal === 'all' || String(d.year) === String(yearVal);
+        const matchOrigin = originVal === 'all' || d.origin === originVal;
+        const matchDest = destVal === 'all' || d.destination === destVal;
+        const matchComm = commVal === 'all' || d.hs_desc === commVal;
+        return matchPhase && matchYear && matchOrigin && matchDest && matchComm;
+    });
+
+    // Sort by descending USD valuation for priority presentation
+    filteredData.sort((a, b) => (b.value_usd || 0) - (a.value_usd || 0));
+
+    updateKPIs();
+    updateCharts();
+    renderTable();
+}
+
+/**
+ * 4. KPI Calculations & Rendering
+ */
+function updateKPIs() {
+    let totalUsd = 0;
+    let totalWeight = 0;
+    const originTotals = {};
+    const destTotals = {};
+
+    filteredData.forEach(d => {
+        const usd = Number(d.value_usd) || 0;
+        const weight = Number(d.weight_kg) || 0;
+        
+        totalUsd += usd;
+        totalWeight += weight;
+
+        if (d.origin) originTotals[d.origin] = (originTotals[d.origin] || 0) + usd;
+        if (d.destination) destTotals[d.destination] = (destTotals[d.destination] || 0) + usd;
+    });
+
+    // Format USD
+    let formattedUsd = `$0.00M`;
+    if (totalUsd >= 1e9) {
+        formattedUsd = `$${(totalUsd / 1e9).toFixed(2)}B`;
+    } else {
+        formattedUsd = `$${(totalUsd / 1e6).toFixed(2)}M`;
     }
 
-    // --------------------------------------------------------------------------
-    // Filtragem e Processamento Central
-    // --------------------------------------------------------------------------
-    function executeFilters() {
-      APP_STATE.filtered = APP_STATE.dataset.filter(row => {
-        const f = APP_STATE.filters;
-        if (f.phase !== 'ALL' && row.phase_id !== f.phase) return false;
-        if (f.year !== 'ALL' && String(row.year) !== f.year) return false;
-        if (f.reporter !== 'ALL' && row.reporter !== f.reporter) return false;
-        if (f.partner !== 'ALL' && row.partner !== f.partner) return false;
-        if (f.commodity !== 'ALL' && row.hs_desc !== f.commodity) return false;
-        
-        if (f.query) {
-          const dict = [row.origin, row.destination, row.hs_desc, row.hs_code].join(' ').toLowerCase();
-          if (!dict.includes(f.query)) return false;
-        }
-        return true;
-      });
-
-      APP_STATE.filtered.sort((a, b) => {
-        const valA = a[APP_STATE.sort.column];
-        const valB = b[APP_STATE.sort.column];
-        if (typeof valA === 'string') {
-          return APP_STATE.sort.direction === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-        }
-        return APP_STATE.sort.direction === 'asc' ? (valA || 0) - (valB || 0) : (valB || 0) - (valA || 0);
-      });
-
-      APP_STATE.page.current = 1;
-      calculateKPIs();
-      updateECharts();
-      renderTable();
+    // Format Weight (Metric Tons: kg / 1000)
+    const metricTons = totalWeight / 1000;
+    let formattedWeight = `${metricTons.toLocaleString(undefined, { maximumFractionDigits: 1 })} MT`;
+    if (metricTons >= 1e6) {
+        formattedWeight = `${(metricTons / 1e6).toFixed(2)}M MT`;
     }
 
-    // --------------------------------------------------------------------------
-    // Integração dos Gráficos ECharts (Com Zoom e Drag)
-    // --------------------------------------------------------------------------
-    function updateECharts() {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      const textColor = isDark ? '#f1f5f9' : '#0f172a';
-      const gridColor = isDark ? '#334155' : '#e2e8f0';
-      const accentColor = isDark ? '#60a5fa' : '#3b82f6';
+    // Find top origin & destination
+    const topOrigin = Object.keys(originTotals).sort((a, b) => originTotals[b] - originTotals[a])[0] || 'N/A';
+    const topDest = Object.keys(destTotals).sort((a, b) => destTotals[b] - destTotals[a])[0] || 'N/A';
 
-      // 1. Processamento de Dados para Sankey
-      const flowMap = {};
-      const uniqueNodes = new Set();
-      
-      APP_STATE.filtered.forEach(r => {
-        if (!r.origin || !r.destination || r.value_usd <= 0) return;
-        // Previne ciclos (A->B, B->A) adicionando sufixos invisíveis na lógica, visíveis no tooltip
-        const sourceName = `${r.origin} [Orig]`;
-        const targetName = `${r.destination} [Dest]`;
-        
-        const hash = `${sourceName}____${targetName}`;
-        flowMap[hash] = (flowMap[hash] || 0) + r.value_usd;
-        
-        uniqueNodes.add(sourceName);
-        uniqueNodes.add(targetName);
-      });
+    document.getElementById('kpiValueUsd').textContent = formattedUsd;
+    document.getElementById('kpiWeight').textContent = formattedWeight;
+    document.getElementById('kpiOrigin').textContent = topOrigin;
+    document.getElementById('kpiDestination').textContent = topDest;
+}
 
-      const nodes = Array.from(uniqueNodes).map(name => ({ name }));
-      const links = Object.entries(flowMap).map(([key, value]) => {
-        const [source, target] = key.split('____');
-        return { source, target, value };
-      });
+/**
+ * 5. Apache ECharts Engine
+ */
+function initECharts() {
+    sankeyInstance = echarts.init(document.getElementById('sankeyChart'));
+    barInstance = echarts.init(document.getElementById('barChart'));
+}
 
-      if (nodes.length === 0) {
-        sankeyChartInstance.clear();
-        barChartInstance.clear();
-        return;
-      }
+function updateChartThemes() {
+    if (!sankeyInstance || !barInstance) return;
+    updateCharts();
+}
 
-      // Configuração avançada do Sankey (Permite Zoom/Roam)
-      const sankeyOption = {
+function updateCharts() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDark ? '#f8fafc' : '#0f172a';
+    const subTextColor = isDark ? '#94a3b8' : '#64748b';
+    const borderColor = isDark ? '#334155' : '#e2e8f0';
+
+    // --- CHART 1: Sankey Diagram with Zoom, Pan, & Cycle Protection ---
+    const sankeyData = processSankeyData(filteredData);
+    
+    const sankeyOption = {
         tooltip: {
-          trigger: 'item',
-          triggerOn: 'mousemove',
-          formatter: function (params) {
-            if(params.dataType === 'node') return `${params.name}: $${params.value.toLocaleString()}`;
-            return `${params.data.source} ➔ ${params.data.target}<br/><b>$${params.data.value.toLocaleString()}</b>`;
-          }
+            trigger: 'item',
+            backgroundColor: isDark ? '#1e293b' : '#ffffff',
+            borderColor: borderColor,
+            textStyle: { color: textColor, fontFamily: 'Inter' },
+            formatter: function(params) {
+                if (params.dataType === 'edge') {
+                    const valM = (params.value / 1e6).toFixed(2);
+                    // Strip hidden suffixes for tooltip presentation
+                    const source = params.data.source.replace(' [Orig]', '');
+                    const target = params.data.target.replace(' [Dest]', '');
+                    return `<strong>${source} → ${target}</strong><br/>Valuation: $${valM}M USD`;
+                } else {
+                    const name = params.name.replace(' [Orig]', '').replace(' [Dest]', '');
+                    return `<strong>${name}</strong>`;
+                }
+            }
         },
         series: [{
-          type: 'sankey',
-          layout: 'none',
-          data: nodes,
-          links: links,
-          roam: true, // HABILITA ZOOM E DRAG NO GRÁFICO (REQUISITO PRINCIPAL)
-          nodeAlign: 'justify',
-          nodeWidth: 15,
-          nodeGap: 15,
-          emphasis: { focus: 'adjacency' },
-          lineStyle: {
-            color: 'gradient',
-            curveness: 0.5,
-            opacity: 0.3
-          },
-          label: {
-            color: textColor,
-            fontFamily: 'Inter',
-            fontSize: 12,
-            formatter: (params) => params.name.replace(' [Orig]', '').replace(' [Dest]', '')
-          }
+            type: 'sankey',
+            layout: 'none',
+            emphasis: { focus: 'adjacency' },
+            roam: true, // CRITICAL: Enables Zoom & Pan
+            nodeAlign: 'left',
+            data: sankeyData.nodes,
+            links: sankeyData.links,
+            lineStyle: {
+                color: 'gradient',
+                curveness: 0.5,
+                opacity: 0.4
+            },
+            label: {
+                color: textColor,
+                fontFamily: 'Inter',
+                fontWeight: 500,
+                fontSize: 12,
+                formatter: function(params) {
+                    // CRITICAL: Format label to hide structural cyclic suffixes
+                    return params.name.replace(' [Orig]', '').replace(' [Dest]', '');
+                }
+            },
+            itemStyle: {
+                borderWidth: 1,
+                borderColor: borderColor
+            }
         }]
-      };
+    };
 
-      sankeyChartInstance.setOption(sankeyOption, true);
+    sankeyInstance.setOption(sankeyOption, true);
 
-      // 2. Processamento de Dados para o Gráfico de Barras
-      const commMap = {};
-      APP_STATE.filtered.forEach(r => {
-        if (!r.hs_desc) return;
-        const lbl = r.hs_desc.length > 35 ? r.hs_desc.substring(0, 35) + '...' : r.hs_desc;
-        commMap[lbl] = (commMap[lbl] || 0) + (r.value_usd || 0);
-      });
+    // --- CHART 2: Horizontal Bar Chart (Top 6 Commodities) ---
+    const barData = processBarData(filteredData);
 
-      const sortedComms = Object.entries(commMap)
-        .sort((a,b) => b[1]-a[1])
-        .slice(0,6)
-        .reverse(); // Echarts desenha barras de baixo para cima
-
-      const barOption = {
-        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        grid: { left: '3%', right: '4%', bottom: '3%', top: '5%', containLabel: true },
-        xAxis: { 
-          type: 'value', 
-          splitLine: { lineStyle: { color: gridColor } },
-          axisLabel: { color: textColor, fontFamily: 'Inter' }
+    const barOption = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { type: 'shadow' },
+            backgroundColor: isDark ? '#1e293b' : '#ffffff',
+            borderColor: borderColor,
+            textStyle: { color: textColor, fontFamily: 'Inter' },
+            formatter: function(params) {
+                const item = params[0];
+                const valM = (item.value / 1e6).toFixed(2);
+                return `<strong>${item.name}</strong><br/>Valuation: $${valM}M USD`;
+            }
         },
-        yAxis: { 
-          type: 'category', 
-          data: sortedComms.map(item => item[0]),
-          axisLabel: { color: textColor, fontFamily: 'Inter', width: 200, overflow: 'truncate' }
+        grid: {
+            top: 10,
+            bottom: 30,
+            left: 10,
+            right: 30,
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            axisLabel: {
+                color: subTextColor,
+                fontFamily: 'Inter',
+                formatter: (val) => `$${(val/1e6).toFixed(0)}M`
+            },
+            splitLine: {
+                lineStyle: { color: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: barData.categories,
+            axisLabel: {
+                color: textColor,
+                fontFamily: 'Inter',
+                fontWeight: 500,
+                width: 180,
+                overflow: 'truncate',
+                ellipsis: '...'
+            },
+            axisLine: { show: false },
+            axisTick: { show: false }
         },
         series: [{
-          type: 'bar',
-          data: sortedComms.map(item => item[1]),
-          itemStyle: { color: accentColor, borderRadius: [0, 4, 4, 0] }
+            type: 'bar',
+            data: barData.values,
+            barWidth: '60%',
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#3b82f6' },
+                    { offset: 1, color: '#60a5fa' }
+                ]),
+                borderRadius: [0, 6, 6, 0]
+            }
         }]
-      };
+    };
 
-      barChartInstance.setOption(barOption, true);
-    }
+    barInstance.setOption(barOption, true);
+}
 
-    // --------------------------------------------------------------------------
-    // Atualização de Tabelas e Métricas
-    // --------------------------------------------------------------------------
-    function calculateKPIs() {
-      let tUSD = 0, tKG = 0;
-      const mapOrigin = {}, mapDest = {};
+/**
+ * Data Processing Helper: Sankey with Cyclic Error Protection
+ * Appends hidden suffixes [Orig] and [Dest] so identical country names
+ * in bidirectional trade loops (e.g. Germany -> Germany or Chile -> Germany -> Chile)
+ * do not trigger cyclic graph crashes in ECharts.
+ */
+function processSankeyData(data) {
+    const linksMap = {};
+    const nodesSet = new Set();
 
-      APP_STATE.filtered.forEach(r => {
-        tUSD += r.value_usd || 0;
-        tKG += r.weight_kg || 0;
-        if (r.origin) mapOrigin[r.origin] = (mapOrigin[r.origin] || 0) + (r.value_usd || 0);
-        if (r.destination) mapDest[r.destination] = (mapDest[r.destination] || 0) + (r.value_usd || 0);
-      });
-
-      const fmtCur = v => v >= 1e9 ? `$${(v/1e9).toFixed(2)}B` : v >= 1e6 ? `$${(v/1e6).toFixed(2)}M` : `$${v.toLocaleString()}`;
-      const fmtWgt = v => (v/1000) >= 1e6 ? `${(v/1e9).toFixed(2)}M` : `${(v/1000).toLocaleString(undefined, {maximumFractionDigits:1})}`;
-
-      const topOrig = Object.entries(mapOrigin).sort((a,b) => b[1]-a[1])[0];
-      const topDest = Object.entries(mapDest).sort((a,b) => b[1]-a[1])[0];
-
-      document.getElementById('kpi-val-usd').textContent = fmtCur(tUSD);
-      document.getElementById('kpi-val-kg').textContent = fmtWgt(tKG);
-      document.getElementById('kpi-origin').textContent = topOrig ? topOrig[0] : '—';
-      document.getElementById('kpi-origin-sub').textContent = topOrig ? fmtCur(topOrig[1]) : '';
-      document.getElementById('kpi-dest').textContent = topDest ? topDest[0] : '—';
-      document.getElementById('kpi-dest-sub').textContent = topDest ? fmtCur(topDest[1]) : '';
-    }
-
-    function renderTable() {
-      const tb = document.getElementById('tbody-data');
-      tb.innerHTML = '';
-
-      const idxStart = (APP_STATE.page.current - 1) * APP_STATE.page.limit;
-      const idxEnd = idxStart + APP_STATE.page.limit;
-      const chunk = APP_STATE.filtered.slice(idxStart, idxEnd);
-
-      if (chunk.length === 0) {
-        tb.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem; color: var(--text-muted);">No records found.</td></tr>';
-        document.getElementById('pagination-info').textContent = 'No records';
-        return;
-      }
-
-      chunk.forEach(r => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><span style="background:var(--border-color); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${(r.phase_id || '').toUpperCase()}</span></td>
-          <td>${r.year || '—'}</td>
-          <td style="font-weight:500;">${r.origin || '—'}</td>
-          <td style="font-weight:500;">${r.destination || '—'}</td>
-          <td style="color: var(--text-muted); font-size: 0.8rem;">${r.hs_code || '—'}</td>
-          <td title="${r.hs_desc}">${r.hs_desc && r.hs_desc.length > 35 ? r.hs_desc.substring(0,35)+'...' : (r.hs_desc || '—')}</td>
-          <td class="col-num" style="font-weight:500;">$${(r.value_usd || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
-          <td class="col-num" style="color: var(--text-muted);">${(r.weight_kg || 0).toLocaleString(undefined, {minimumFractionDigits:1, maximumFractionDigits:1})}</td>
-        `;
-        tb.appendChild(tr);
-      });
-
-      const total = APP_STATE.filtered.length;
-      document.getElementById('pagination-info').textContent = `Showing ${idxStart + 1} to ${Math.min(idxEnd, total)} of ${total.toLocaleString()} entries`;
-      
-      document.getElementById('btn-prev').disabled = APP_STATE.page.current === 1;
-      document.getElementById('btn-next').disabled = idxEnd >= total;
-    }
-
-    function handleSort(col) {
-      if (APP_STATE.sort.column === col) {
-        APP_STATE.sort.direction = APP_STATE.sort.direction === 'desc' ? 'asc' : 'desc';
-      } else {
-        APP_STATE.sort.column = col;
-        APP_STATE.sort.direction = 'desc';
-      }
-      executeFilters();
-    }
-
-    function handlePagination(step) {
-      const maxPages = Math.ceil(APP_STATE.filtered.length / APP_STATE.page.limit);
-      APP_STATE.page.current = Math.max(1, Math.min(maxPages, APP_STATE.page.current + step));
-      renderTable();
-    }
-
-    function generateCSV() {
-      if (APP_STATE.filtered.length === 0) return;
-      const header = ['Phase', 'Year', 'Origin', 'Destination', 'Flow', 'HS_Code', 'Commodity', 'Value_USD', 'Weight_KG'];
-      const dataRows = APP_STATE.filtered.map(r => [
-        r.phase_id, r.year, `"${r.origin}"`, `"${r.destination}"`, r.flow, `"${r.hs_code}"`, `"${(r.hs_desc||'').replace(/"/g, '""')}"`, r.value_usd, r.weight_kg
-      ]);
-      const csvStr = 'data:text/csv;charset=utf-8,' + [header.join(','), ...dataRows.map(row => row.join(','))].join('\n');
-      
-      const a = document.createElement('a');
-      a.href = encodeURI(csvStr);
-      a.download = `Metabolism_Extract_${new Date().toISOString().slice(0,10)}.csv`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    }
-
-    function setupTheme() {
-      const btn = document.getElementById('theme-switcher');
-      const saved = localStorage.getItem('theme_clean') || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
-      updateBtnUI(saved);
-      
-      btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme_clean', next);
-        updateBtnUI(next);
+    data.forEach(d => {
+        if (!d.origin || !d.destination) return;
         
-        // Atualiza as cores do ECharts ao trocar de tema
-        if (sankeyChartInstance) updateECharts();
-      });
-      
-      function updateBtnUI(t) {
-        btn.textContent = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-      }
+        // Append suffix to isolate origin nodes from destination nodes
+        const origNode = `${d.origin} [Orig]`;
+        const destNode = `${d.destination} [Dest]`;
+        
+        nodesSet.add(origNode);
+        nodesSet.add(destNode);
+
+        const key = `${origNode}___${destNode}`;
+        linksMap[key] = (linksMap[key] || 0) + (Number(d.value_usd) || 0);
+    });
+
+    const nodes = Array.from(nodesSet).map(name => {
+        // Assign distinct color hues based on whether node is Origin or Sink
+        const isOrig = name.endsWith('[Orig]');
+        return {
+            name: name,
+            itemStyle: {
+                color: isOrig ? '#3b82f6' : '#10b981'
+            }
+        };
+    });
+
+    const links = Object.entries(linksMap).map(([key, value]) => {
+        const [source, target] = key.split('___');
+        return { source, target, value };
+    });
+
+    return { nodes, links };
+}
+
+/**
+ * Data Processing Helper: Top 6 Commodities by Valuation
+ */
+function processBarData(data) {
+    const commMap = {};
+    data.forEach(d => {
+        const desc = d.hs_desc || `HS ${d.hs_code}` || 'Unknown';
+        commMap[desc] = (commMap[desc] || 0) + (Number(d.value_usd) || 0);
+    });
+
+    // Sort ascending for ECharts horizontal bar display (bottom to top)
+    const sorted = Object.entries(commMap)
+        .sort((a, b) => a[1] - b[1])
+        .slice(-6);
+
+    return {
+        categories: sorted.map(item => item[0]),
+        values: sorted.map(item => item[1])
+    };
+}
+
+/**
+ * 6. Interactive Data Ledger & Pagination
+ */
+function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    const totalRecords = filteredData.length;
+    const totalPages = Math.ceil(totalRecords / rowsPerPage) || 1;
+    
+    // Validate Current Page Bounds
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const startIdx = (currentPage - 1) * rowsPerPage;
+    const endIdx = Math.min(startIdx + rowsPerPage, totalRecords);
+    const pageData = filteredData.slice(startIdx, endIdx);
+
+    document.getElementById('tableSubtitle').textContent = `Showing ${totalRecords.toLocaleString()} trade records`;
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    
+    document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+    document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+
+    if (pageData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">No matching trade flows found for selected parameters.</td></tr>`;
+        return;
     }
-  </script>
+
+    pageData.forEach(row => {
+        const tr = document.createElement('tr');
+        
+        // Phase Badge Styling
+        const phaseId = (row.phase_id || 'all').toLowerCase();
+        const badgeClass = `badge badge-${phaseId}`;
+        const phaseText = phaseId.toUpperCase();
+
+        // Formatted Values
+        const valUsd = (Number(row.value_usd) || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+        const weightMt = ((Number(row.weight_kg) || 0) / 1000).toLocaleString('en-US', { maximumFractionDigits: 2 });
+
+        tr.innerHTML = `
+            <td><span class="${badgeClass}">${phaseText}</span></td>
+            <td>${row.year || '-'}</td>
+            <td style="font-weight: 500;">${row.origin || '-'}</td>
+            <td style="font-weight: 500;">${row.destination || '-'}</td>
+            <td>
+                <div style="font-weight: 500;">${row.hs_desc || 'Unknown Commodity'}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">HS: ${row.hs_code || 'N/A'}</div>
+            </td>
+            <td>${row.flow || '-'}</td>
+            <td style="font-family: monospace; font-size: 0.9rem;">${valUsd}</td>
+            <td style="font-family: monospace; font-size: 0.9rem;">${weightMt}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+</script>
 </body>
 </html>
